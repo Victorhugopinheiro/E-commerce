@@ -28,6 +28,7 @@ function Collection() {
 
   const [category, setCategory] = useState<string[]>([]);
   const [subCategory, setSubCategory] = useState<string[]>([]);
+  const [sortProducts, setSortProducts] = useState<string>("Relevant");
 
   useEffect(() => {
     const handleResize = () => {
@@ -70,6 +71,29 @@ function Collection() {
     }
   }
 
+  const sortItems = () => {
+
+
+
+    const showProducts = [...filterProducts];
+
+    switch (sortProducts) {
+      case "Low-high":
+        showProducts.sort((a, b) => a.price - b.price);
+        setFilterProducts([...showProducts]);
+        break;
+
+      case "High-low":
+        showProducts.sort((a, b) => b.price - a.price);
+        setFilterProducts([...showProducts]);
+        break;
+
+      default:
+        setFilterProducts([...products!]);
+        break;
+    }
+  }
+
   const gettingFilteredProducts = () => {
     if (category.length > 0) {
       const filtered = products!.filter(product => category.includes(product.category));
@@ -91,6 +115,10 @@ function Collection() {
     gettingFilteredProducts();
 
   }, [category, subCategory]);
+
+  useEffect(() => {
+    sortItems()
+  }, [sortProducts])
 
   return (
     <div className="flex flex-col sm:flex-row gap-10">
@@ -119,9 +147,9 @@ function Collection() {
         <div className={`flex flex-col my-6 justify-center gap-2 border p-4  border-gray-300 ${showFilters ? "" : "hidden"}`}>
           <p className="mb-3 font-medium">TIPO</p>
 
-          <Checkbox onChange={changeSubcategory} title="CAMISETA" value="Topwear" />
+          <Checkbox onChange={changeSubcategory} title="CAMISETAS" value="Topwear" />
           <Checkbox onChange={changeSubcategory} title="AGASALHOS" value="Winterwear" />
-          <Checkbox onChange={changeSubcategory} title="BERMUDA" value="Bottomwear" />
+          <Checkbox onChange={changeSubcategory} title="BERMUDAS" value="Bottomwear" />
         </div>
 
       </div>
@@ -133,11 +161,11 @@ function Collection() {
           <Tittle title1="MELHORES" title2="COLEÇOES" />
 
 
-          <select className="border border-gray-300 rounded-md p-2 text-gray-700">
-            <option value="default">Ordenar por</option>
-            <option value="price-asc">Preço: Baixo a Alto</option>
-            <option value="price-desc">Preço: Alto a Baixo</option>
-            <option value="newest">Mais Novo</option>
+          <select onChange={(e) => setSortProducts(e.target.value)} className="border border-gray-300 rounded-md p-2 text-gray-700">
+            <option value="Relevant">Relevantes</option>
+            <option value="Low-high">Preço: Baixo a Alto</option>
+            <option value="High-low">Preço: Alto a Baixo</option>
+
           </select>
         </div>
 
