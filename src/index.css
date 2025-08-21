@@ -5,8 +5,9 @@
 
 
 a.active hr{
-  display: block
+  display: block;
 }
+
 
 *{
   font-family: 'Outfit', sans-serif;

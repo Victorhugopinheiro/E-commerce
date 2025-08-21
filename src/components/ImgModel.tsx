@@ -6,11 +6,12 @@ interface ImgModelProps {
     title: string;
     price: string;
     currency?: string;
+    id?:string
 }
 
-function ImgModel({ price, title, url, currency }: ImgModelProps) {
+function ImgModel({ price, title, url, currency, id }: ImgModelProps) {
     return (
-        <Link to={`/product/${title}`} className="flex flex-col items-center justify-between gap-2 bg-white p-3 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300">
+        <Link to={`/product/${id}`} className="flex flex-col items-center justify-between gap-2 bg-white p-3 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300">
             <div className="overflow-hidden">
                 <img className="hover:scale-110 transition ease-in-out" src={url} />
             </div>

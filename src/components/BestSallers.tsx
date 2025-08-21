@@ -32,6 +32,7 @@ function BestSallers() {
                         title={product.name}
                         price={`${product.price} ${product.category}`}
                         currency={currency}
+                        id={product._id}
                     />
                 ))}
             </div>

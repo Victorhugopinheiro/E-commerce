@@ -1,10 +1,12 @@
 import { Link, NavLink } from 'react-router-dom'
 import { assets } from '../assets/assets'
-import { useState } from 'react'
+import { useContext, useState } from 'react'
+import { ShopContext } from '../context/ShopContext'
 
 const Navbar = () => {
 
     const [controlMenu, setControlMenu] = useState(false)
+    const { setShowSearch, cart } = useContext(ShopContext)!;
 
     return (
         <div className='flex justify-between items-center py-5 font-medium'>
@@ -18,7 +20,7 @@ const Navbar = () => {
                 </NavLink>
 
                 <NavLink to={'/collection'} className=' flex flex-col items-center gap-1'>
-                    <p>COLEÇAO</p>
+                    <p>COLEÇÃO</p>
 
                     <hr className='hidden w-2/4 border-none h-[1.5px] bg-gray-700' />
                 </NavLink>
@@ -38,7 +40,7 @@ const Navbar = () => {
 
             <div className='flex gap-5 items-center'>
 
-                <img src={assets.search_icon} className='w-5' />
+                <img onClick={() => setShowSearch!(true)} src={assets.search_icon} className='w-5 cursor-pointer' />
 
                 <div className='group relative'>
                     <img src={assets.profile_icon} className='w-5 cursor-pointer' />
@@ -57,7 +59,7 @@ const Navbar = () => {
                 <Link to={'/cart'} className='relative'>
                     <img className='w-5 min-w-5' src={assets.cart_icon} />
                     <p className='absolute right-[-5px] bottom-[-5px] w-4 text-center leading-4 bg-black
-                     text-white rounded-full aspect-square text-[8px]'>10</p>
+                     text-white rounded-full aspect-square text-[8px]'>{cart?.length}</p>
                 </Link>
 
                 <img onClick={() => setControlMenu(true)} className='w-5 md:hidden' src={assets.menu_icon} />
@@ -67,15 +69,15 @@ const Navbar = () => {
 
                     <div className='flex flex-col text-gray-600'>
 
-                        <div className='flex gap-6 items-center p-2'>
+                        <div onClick={() => setControlMenu(false)} className='flex gap-6 items-center w-fit p-2 cursor-pointer hover:text-black'>
                             <img src={assets.dropdown_icon} className='h-4 rotate-180' />
-                            <p>Voltar</p>
+                            <p >Voltar</p>
                         </div>
 
-                        <NavLink onClick={() => setControlMenu(false)} to={'/'} className={'py-2 pl-6 border-b'}>HOME</NavLink>
-                        <NavLink onClick={() => setControlMenu(false)} to={'/'} className={'py-2 pl-6 border-b'}>COLEÇAO</NavLink>
-                        <NavLink onClick={() => setControlMenu(false)} to={'/'} className={'py-2 pl-6 border-b'}>SOBRE</NavLink>
-                        <NavLink onClick={() => setControlMenu(false)} to={'/'} className={'py-2 pl-6 border-b'}>CONTATO</NavLink>
+                        <NavLink onClick={() => setControlMenu(false)} to={'/'} className={'py-2 pl-6 border-b hover:text-black'}>HOME</NavLink>
+                        <NavLink onClick={() => setControlMenu(false)} to={'/'} className={'py-2 pl-6 border-b hover:text-black'}>COLEÇÃO</NavLink>
+                        <NavLink onClick={() => setControlMenu(false)} to={'/'} className={'py-2 pl-6 border-b hover:text-black'}>SOBRE</NavLink>
+                        <NavLink onClick={() => setControlMenu(false)} to={'/'} className={'py-2 pl-6 border-b hover:text-black'}>CONTATO</NavLink>
 
                     </div>
 

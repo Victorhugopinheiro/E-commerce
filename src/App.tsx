@@ -10,12 +10,16 @@ import PlaceOrder from "./pages/PlaceOrder"
 import Product from "./pages/Product"
 import Navbar from "./components/Navbar"
 import Footer from "./components/Footer"
+import Search from "./components/Search"
+  import { ToastContainer } from 'react-toastify';
 
 
 function App() {
    return (
-      <div className="px-4 sm:px-[5vh] md:px-[7vh] lg:px-[9vh]">
+      <div className="px-4 sm:px-[5vh] md:px-[2vh] lg:px-[20vh]">
          <Navbar/>
+          <Search/>
+          <ToastContainer />
          <Routes>
 
             <Route path="/" element={<Home />} />
@@ -26,8 +30,10 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/orders" element={<Orders />} />
             <Route path="/placeorder" element={<PlaceOrder />} />
-            <Route path="/product" element={<Product />} />
+            <Route path="/product/:id" element={<Product />} />
          </Routes>
+
+        
 
          <Footer/>
       </div>

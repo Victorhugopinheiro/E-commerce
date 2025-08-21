@@ -21,7 +21,7 @@ export interface ProductProps {
 
 function Collection() {
 
-  const { products } = useContext(ShopContext)!;
+  const { products, showSearch, search } = useContext(ShopContext)!;
 
   const [showFilters, setShowFilters] = useState(true);
   const [filterProducts, setFilterProducts] = useState<ProductProps[]>([]);
@@ -73,8 +73,6 @@ function Collection() {
 
   const sortItems = () => {
 
-
-
     const showProducts = [...filterProducts];
 
     switch (sortProducts) {
@@ -95,6 +93,17 @@ function Collection() {
   }
 
   const gettingFilteredProducts = () => {
+
+    if (search && showSearch) {
+      const filtered = products!.filter(product =>
+        product.name.toLowerCase().includes(search.toLowerCase()) ||
+        product.description.toLowerCase().includes(search.toLowerCase())
+      );
+      setFilterProducts(filtered);
+      return;
+    }
+
+
     if (category.length > 0) {
       const filtered = products!.filter(product => category.includes(product.category));
       setFilterProducts(filtered);
@@ -114,7 +123,7 @@ function Collection() {
 
     gettingFilteredProducts();
 
-  }, [category, subCategory]);
+  }, [category, subCategory, search, showSearch]);
 
   useEffect(() => {
     sortItems()
@@ -135,8 +144,8 @@ function Collection() {
 
 
 
-        <div className={`flex flex-col my-6 justify-center gap-2 border p-4 border-gray-300 ${showFilters ? "" : "hidden"}`}>
-          <p className="mb-3 font-medium">CATEGORIES</p>
+        <div className={`flex flex-col my-2 justify-center gap-2 border p-4 border-gray-300 ${showFilters ? "" : "hidden"}`}>
+          <p className="mb-1 font-medium">CATEGORIAS</p>
 
           <Checkbox onChange={changeCategory} title="HOMEM" value="Men" />
           <Checkbox onChange={changeCategory} title="MULHER" value="Women" />
@@ -144,8 +153,8 @@ function Collection() {
 
         </div>
 
-        <div className={`flex flex-col my-6 justify-center gap-2 border p-4  border-gray-300 ${showFilters ? "" : "hidden"}`}>
-          <p className="mb-3 font-medium">TIPO</p>
+        <div className={`flex flex-col my-2 justify-center gap-2 border p-4  border-gray-300 ${showFilters ? "" : "hidden"}`}>
+          <p className="mb-1 font-medium">TIPO</p>
 
           <Checkbox onChange={changeSubcategory} title="CAMISETAS" value="Topwear" />
           <Checkbox onChange={changeSubcategory} title="AGASALHOS" value="Winterwear" />
@@ -182,6 +191,13 @@ function Collection() {
           ))}
 
         </div>
+
+
+        {filterProducts.length === 0 && (
+          <div className="flex items-center justify-center h-64">
+            <p className="text-gray-500 text-3xl">Nenhum produto encontrado...</p>
+          </div>
+        )}
 
       </div>
 
