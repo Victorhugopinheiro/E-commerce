@@ -1,8 +1,11 @@
-import React from 'react'
+
 
 function PlaceOrder() {
   return (
-    <div>PlaceOrder</div>
+    <div className="flex flex-col lg:flex-row lg:justify-between">
+
+      
+    </div>
   )
 }
 

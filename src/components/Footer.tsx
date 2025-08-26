@@ -7,24 +7,23 @@ function Footer() {
             <div className='flex flex-col items-center  md:grid md:grid-cols-3 gap-10 p-10 '>
 
                 <div className='flex flex-col items-center gap-4 md:items-start'>
-                    <img className='w-36 md:mb-4' src={assets.logo} alt='Logo' />
-                    <p className='text-sm text-gray-800 w-2/3'>Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                        Quisquam, quod.</p>
+                    <img className='w-36 md:mb-1' src={assets.logo} alt='Logo' />
+                    <p className='text-sm text-gray-800 w-2/3 font-medium'>Produto com qualidade forever</p>
                 </div>
 
 
                 <div>
-                    <h3 className='font-medium mb-4 text-2xl'>Links Úteis</h3>
+                    <h3 className='font-medium mb-1 text-2xl'>Links Úteis</h3>
                     <ul className='text-sm text-gray-800 flex flex-col gap-1 md:gap-2'>
-                        <li className='cursor-pointer hover:text-black'>Home</li>
-                        <li className='cursor-pointer hover:text-black'>Coleção</li>
-                        <li className='cursor-pointer hover:text-black'>Sobre</li>
-                        <li className='cursor-pointer hover:text-black'>Contato</li>
+                        <li className='cursor-pointer hover:text-black w-fit'>Home</li>
+                        <li className='cursor-pointer hover:text-black w-fit'>Coleção</li>
+                        <li className='cursor-pointer hover:text-black w-fit'>Sobre</li>
+                        <li className='cursor-pointer hover:text-black w-fit'>Contato</li>
                     </ul>
                 </div>
 
                 <div>
-                    <h3 className='font-medium mb-4 text-2xl'>CONTATO</h3>
+                    <h3 className='font-medium mb-1 text-2xl'>CONTATO</h3>
                     <ul className='text-sm text-gray-800 flex flex-col gap-2'>
                         <li className='cursor-pointer hover:text-black'>Email: contact@gmail.com</li>
                         <li className='cursor-pointer hover:text-black'>Telefone: +55 1198765-8910</li>

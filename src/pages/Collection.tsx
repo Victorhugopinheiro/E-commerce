@@ -187,6 +187,7 @@ function Collection() {
               title={product.name}
               price={product.price.toFixed(2)}
               currency="R$"
+              id={product._id}
             />
           ))}
 

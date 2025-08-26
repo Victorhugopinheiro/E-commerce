@@ -10,9 +10,9 @@ function Product() {
   const productId = useParams()
 
 
-  console.log(productId)
 
-  const { products, addToCart } = useContext(ShopContext)!;
+
+  const { products, addToCart, currency } = useContext(ShopContext)!;
   const product = products?.find(p => p._id === productId.id);
   const [selectedImage, setSelectedImage] = useState(product?.image[0] || "");
   const [sizeSelected, setSizeSelected] = useState("")
@@ -52,7 +52,7 @@ function Product() {
 
 
         <div className="flex-1 ml-10 flex flex-col">
-          <h1 className="text-2xl font-bold">{product.name}</h1>
+          <h1 className="text-2xl font-bold mt-2 md:mt-0">{product.name}</h1>
           <div className="flex items-center  mt-2">
 
             <img className="w-3 5" src={assets.star_icon} alt="" />
@@ -66,7 +66,7 @@ function Product() {
           </div>
 
 
-          <p className="font-bold mt-2">{product.price}</p>
+          <p className="font-bold mt-2 text-2xl">{currency}{product.price}</p>
           <p className="text-xl w-full mt-4 lg:w-10/12">R${product.description}</p>
 
           <div className="mt-6">
