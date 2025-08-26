@@ -7,7 +7,7 @@ interface TitleProps {
 
 function Tittle({ title1, title2 }: TitleProps) {
     return (
-        <div className="my-10 flex items-center justify-center gap-2">
+        <div className="my-10 flex items-center justify-start gap-2">
 
             <p className="text-xl md:text-2xl text-gray-600">{title1}</p>
             <p className=" text-2xl md:text-3xl font-medium">{title2}</p>

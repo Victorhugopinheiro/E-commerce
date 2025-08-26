@@ -18,7 +18,7 @@ function CartTotal() {
                     <p>{currency}{totalValue},00</p>
                     
                 </div>
-                <hr/>
+                <hr  className='text-gray-400'/>
 
                 
                 <div className='flex justify-between'>
@@ -27,7 +27,7 @@ function CartTotal() {
                     <p>{currency}{fee},00</p>
                     
                 </div>
-                <hr/>
+                <hr className='text-gray-400'/>
 
                 
                 <div className='flex justify-between'>
@@ -36,7 +36,7 @@ function CartTotal() {
                     <p className='font-bold'>{currency}{(Number(totalValue) + Number(fee))},00</p>
                     
                 </div>
-                <hr/>
+                
 
 
             </div>
