@@ -1,10 +1,17 @@
+import { useState } from "react"
 import { assets } from "../assets/assets"
 import CartTotal from "../components/cart/CartTotal"
 import InputComponent from "../components/PlaceOrder/InputComponent"
 import Tittle from "../components/Tittle"
+import { useNavigate } from "react-router-dom"
 
 
 function PlaceOrder() {
+
+  const [paymentMethod, setPaymentMethod] = useState('')
+
+  const navigation = useNavigate()
+
   return (
     <div className="flex flex-col lg:flex-row lg:justify-around lg: items-center">
 
@@ -42,7 +49,7 @@ function PlaceOrder() {
       </div>
 
 
-      <div className="flex flex-col w-full max-w-[500px]">
+      <div className="flex flex-col items w-full max-w-[500px]">
 
 
         <CartTotal />
@@ -55,25 +62,29 @@ function PlaceOrder() {
 
           <div className="flex justify-around gap-6">
 
-            <button className="px-8 py-1  border border-gray-300 text-center">
+            <button onClick={() => setPaymentMethod('stripe')} className="px-8 py-1 flex items-center gap-2 border border-gray-300 text-center">
+              <div className={`w-3 h-3 border border-gray-300 rounded-full flex ${paymentMethod === 'stripe' ? 'bg-green-400' : ''}`} />
               <img className="w-18" src={assets.stripe_logo} />
 
             </button>
 
 
-            <button className="px-8 py-1  border border-gray-300 text-center">
+
+
+            <button onClick={() => setPaymentMethod('razorpay')} className="px-8 gap-2 py-1 flex items-center border border-gray-300 text-center">
+              <div className={`w-3 h-3 border border-gray-300 rounded-full flex ${paymentMethod === 'razorpay' ? 'bg-green-400' : ''}`} />
               <img className="w-18" src={assets.razorpay_logo} />
 
             </button>
 
-            <button className="px-8 py-1  border border-gray-300 text-center">
-              <img className="w-18" src={assets.stripe_logo} />
-
-            </button>
 
 
           </div>
 
+        </div>
+
+        <div className="w-full mt-10 flex justify-center">
+          <button onClick={() => navigation('/orders')} className="px-8 py-3 w-full max-w-[300px] text-center rounded bg-black text-white text-xl">Order</button>
         </div>
 
       </div>
