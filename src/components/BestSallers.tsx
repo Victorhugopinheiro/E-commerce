@@ -1,13 +1,20 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import ImgModel from "./ImgModel";
 import Tittle from "./Tittle";
 import { ShopContext } from "../context/ShopContext";
 
 
 
+
 function BestSallers() {
 
-    const {  bestSallers, currency } = useContext(ShopContext)!
+    const { bestSallers, currency, products } = useContext(ShopContext)!
+
+    useEffect(() => {
+        
+
+        console.log("BestSallers component rendered or updated");
+    }, [products]);
 
     return (
         <div className="my-8">

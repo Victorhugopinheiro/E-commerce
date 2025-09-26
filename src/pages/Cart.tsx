@@ -57,7 +57,7 @@ function Cart() {
                     </button>
                     <p className="text-sm">{item.quantity}</p>
                     <button
-                      onClick={() => removeProduct!(item.productId)}
+                      onClick={() => removeProduct!(item.productId, item.size)}
                       className="bg-gray-200 text-black px-3 py-1 rounded hover:bg-gray-400 transition-colors duration-200"
                     // onClick={...}
                     >
@@ -84,12 +84,12 @@ function Cart() {
           <div className="flex justify-end mt-4 mx-4">
             <div className="w-full md:w-[400px]">
 
-              <CartTotal/>
+              <CartTotal />
 
               <div onClick={() => navigation('/place-order')} className="bg-black text-center cursor-pointer text-white mt-6 px-6 py-4 rounded">
                 <p className="text-xl">Finalizar compra</p>
               </div>
-            
+
             </div>
 
           </div>

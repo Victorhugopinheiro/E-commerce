@@ -2,11 +2,14 @@ import { Link, NavLink } from 'react-router-dom'
 import { assets } from '../assets/assets'
 import { useContext, useState } from 'react'
 import { ShopContext } from '../context/ShopContext'
+import { AuthContext } from '../context/authContext'
 
 const Navbar = () => {
 
     const [controlMenu, setControlMenu] = useState(false)
     const { setShowSearch, cart } = useContext(ShopContext)!;
+    const { token, signOut } = useContext(AuthContext)!;
+
 
     return (
         <div className='flex justify-between items-center py-5 font-medium'>
@@ -43,16 +46,25 @@ const Navbar = () => {
                 <img onClick={() => setShowSearch!(true)} src={assets.search_icon} className='w-5 cursor-pointer' />
 
                 <div className='group relative'>
-                    <img src={assets.profile_icon} className='w-5 cursor-pointer' />
+                    {token ? <>
 
-                    <div className='group-hover:block hidden absolute dropdown-menu right-0 pt-4'>
-                        <div className='flex flex-col gap-2 w-36 py-3 px-5 bg-slate-100 text-gray-400'>
-                            <p className='cursor-pointer hover:text-black'>Meu Perfil</p>
-                            <p className='cursor-pointer hover:text-black'>Pedidos</p>
-                            <p className='cursor-pointer hover:text-black'>Sair</p>
-                        </div>
-                    </div>
+                        <img src={assets.profile_icon} className='w-5 cursor-pointer' />
 
+                        <div className='group-hover:block hidden absolute dropdown-menu right-0 pt-4'>
+                            <div className='flex flex-col gap-2 w-36 py-3 px-5 bg-slate-100 text-gray-400'>
+                                <p className='cursor-pointer hover:text-black'>Meu Perfil</p>
+                                <p className='cursor-pointer hover:text-black'>Pedidos</p>
+                                <p onClick={() => signOut()} className='cursor-pointer hover:text-black'>Sair</p>
+                            </div>
+                        </div></>
+                        : <>
+                            <Link to={'/login'}>
+                                <img src={assets.profile_icon} className='w-5 cursor-pointer' />
+                            </Link>
+
+
+
+                        </>}
                 </div>
 
 

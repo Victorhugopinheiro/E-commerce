@@ -1,10 +1,28 @@
-import { useState } from "react"
+import { useContext, useState } from "react"
 import InputComponent from "../components/PlaceOrder/InputComponent"
+import { AuthContext } from "../context/authContext"
 
 
 function Login() {
 
-  const [controlAuthetication, setControlAuthetication] = useState('signUp')
+  const { signIn, signUp } = useContext(AuthContext)
+
+  const [controlAuthetication, setControlAuthetication] = useState('signIn')
+  const [username, setUsername] = useState('')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+
+  const signUpp = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    e.preventDefault()
+
+
+    signUp(username, email, password,)
+  }
+
+  const signInn = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    e.preventDefault()
+    signIn(email, password)
+  }
 
   return (
     <form className="flex flex-col items-center w-[90%] m-auto mt-30 md:max-w-96">
@@ -17,12 +35,12 @@ function Login() {
 
 
       {controlAuthetication === 'signUp' && (
-        <InputComponent placeHolder="Name" />
+        <InputComponent value={username} onChange={setUsername} placeHolder="Nome" />
       )}
 
-      <InputComponent placeHolder="Email" />
+      <InputComponent value={email} onChange={setEmail} placeHolder="Email" />
 
-      <InputComponent placeHolder="Password" />
+      <InputComponent value={password} onChange={setPassword} placeHolder="Password" />
 
       <div className="flex text-gray-800 w-full justify-between">
         <p className="cursor-pointer">Esqueceu sua senha?</p>
@@ -32,7 +50,11 @@ function Login() {
         }
       </div>
 
-      <button className="mt-6 bg-black w-[200px] text-white py-2 rounded cursor-pointer">{controlAuthetication === 'signIn' ? 'Entrar' : 'Cadastrar'}</button>
+      {controlAuthetication === 'signUp' ? (
+        <button onClick={(e) => signUpp(e)} className="mt-6 bg-black w-[200px] text-white py-2 rounded cursor-pointer">
+          Cadastrar</button>
+      ) : <button onClick={(e) => signInn(e)} className="mt-6 bg-black w-[200px] text-white py-2 rounded cursor-pointer">
+        Entrar</button>}
     </form>
   )
 }

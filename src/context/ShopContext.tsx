@@ -1,8 +1,10 @@
 
 
-import { createContext, useEffect, useState } from "react";
-import { products as initialProducts } from "../assets/assets";
+import { createContext, useContext, useEffect, useState } from "react";
+
 import { toast } from "react-toastify";
+import api from "../service/api";
+import { AuthContext } from "./authContext";
 
 export interface ProductProps {
     _id: string;
@@ -53,73 +55,85 @@ interface ShopContextType {
 
 
 
-    removeProduct?: (productId: string) => void;
+    removeProduct?: (productId: string, size:string) => void;
     totalItems?: () => number;
 
     totalValue?: number;
     setTotalValue?: (total: number) => void;
 
+    gettinProducts?: () => void;
+
 }
 
 export const ShopContext = createContext<ShopContextType | undefined>(undefined);
 
+// ...existing code...
+
 export const ShopProvider = ({ children }: { children: React.ReactNode }) => {
+    const { token } = useContext(AuthContext)!;
+
     const [currency, setCurrency] = useState<string>("R$");
     const [fee, setFee] = useState<string>("10");
-    const products: ProductProps[] = initialProducts;
-    const [latesteProducts, setLatestProducts] = useState<ProductProps[]>(products.slice(0, 10));
-    const [bestSallers, setBestSallers] = useState<ProductProps[]>(products.filter(product => product.bestseller).slice(0, 5));
+    const [products, setProducts] = useState<ProductProps[]>([]);
+
+    const [latesteProducts, setLatestProducts] = useState<ProductProps[]>([]);
+    const [bestSallers, setBestSallers] = useState<ProductProps[]>([]);
 
     const [search, setSearch] = useState<string>("");
     const [showSearch, setShowSearch] = useState<boolean>(false);
 
     const [totalValue, setTotalValue] = useState<number>(0)
-    console.log(products)
-
     const [cart, setCart] = useState<CartItem[]>([]);
 
-    const addToCart = (item: CartItem) => {
-
+    const addToCart = async (item: CartItem) => {
         if (!item.size) {
             toast.error("Por favor, selecione um tamanho válido.");
             return
         }
 
-        setCart(prevCart => {
-            const existingItem = prevCart.find(cartItem => cartItem.productId === item.productId && cartItem.size === item.size);
-            if (existingItem) {
-                return prevCart.map(cartItem =>
-                    cartItem.productId === item.productId && cartItem.size === item.size
-                        ? { ...cartItem, quantity: cartItem.quantity + item.quantity }
-                        : cartItem
-                );
+        if (!token) {
+            toast.error("Você precisa estar logado para adicionar ao carrinho.");
+            return;
+        }
+
+        try {
+            const response = await api.post('/api/cart/add', { 
+                productId: item.productId, 
+                quantity: item.quantity, 
+                size: item.size 
+            }, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+
+            if (response.data.success) {
+                setCart(response.data.cart);
+                toast.success("Produto adicionado ao carrinho!");
             }
-            return [...prevCart, item];
-        });
+        } catch (error: any) {
+            console.error("Error adding to cart:", error);
+            toast.error("Erro ao adicionar produto ao carrinho.");
+        }
     }
 
+    const removeProduct = async (productId: string, size: string) => {
+        if (!token) return;
 
+        try {
+            const response = await api.delete('/api/cart/remove', {
+                data: { productId, size },
+                headers: { Authorization: `Bearer ${token}` }
+            });
 
-
-    const removeProduct = (productId: string) => {
-        setCart(prevCart => {
-            const exist = prevCart.find(item => item.productId === productId)
-
-            if (exist) {
-                if (exist.quantity === 1) {
-                    return prevCart.filter(item => item.productId !== productId)
-                } else {
-                    return prevCart.map(item =>
-                        item.productId === productId
-                            ? { ...item, quantity: item.quantity - 1 }
-                            : item
-                    )
-                }
+            if (response.data.success) {
+                setCart(response.data.cart);
+                toast.success("Produto removido do carrinho!")
+            } else {
+                toast.error("Erro ao remover produto do carrinho!")
             }
-
-            return prevCart;
+        } catch (error) {
+            console.error("Error removing product:", error);
+            toast.error("Erro ao remover produto.");
         }
-        );
     }
 
     const totalItems = () => {
@@ -134,10 +148,80 @@ export const ShopProvider = ({ children }: { children: React.ReactNode }) => {
         return total;
     }
 
-    useEffect(() => {
-        console.log("Cart updated:", cart);
+    const gettinProducts = async () => {
+        try {
+            const response = await api.get('/api/products/list');
+            
+            if (response.data.success) {
+                setProducts(response.data.products);
+                setLatestProducts(response.data.products.slice(0, 10));
+                setBestSallers(response.data.products.filter((product: ProductProps) => product.bestseller).slice(0, 5));
+            }
+        } catch (error) {
+            console.error("Error fetching products:", error);
+        }
+    }
 
-    }, [cart])
+    const getProductsCart = async () => {
+        // Verificações mais rigorosas
+        if (!token || token === 'undefined' || token === 'null' || token.trim() === '') {
+            console.log("Token inválido para buscar carrinho:", token);
+            return;
+        }
+
+        try {
+            console.log("Buscando carrinho com token válido:", token.substring(0, 20) + "...");
+            
+            const response = await api.post('/api/cart/items', {
+                headers: { 
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (response.data.success) {
+                setCart(response.data.cart || []);
+                console.log('Carrinho carregado com sucesso:', response.data.cart);
+            }
+        } catch (error: any) {
+            console.error("Erro completo ao buscar carrinho:", {
+                status: error.response?.status,
+                data: error.response?.data,
+                headers: error.response?.headers,
+                token: token?.substring(0, 20) + "..."
+            });
+            
+            if (error.response?.status === 401) {
+                console.log("Token não autorizado para carrinho - verificar backend");
+            }
+        }
+    };
+
+    // Carrega produtos uma vez ao inicializar
+    useEffect(() => {
+        gettinProducts();
+    }, []);
+
+    // Aguarda token válido antes de buscar carrinho
+    useEffect(() => {
+        console.log("Token mudou:", token ? token.substring(0, 20) + "..." : "sem token");
+        
+        // Delay para garantir que o token foi completamente inicializado
+        if (token && token !== 'undefined' && token !== 'null') {
+            const timeoutId = setTimeout(() => {
+                getProductsCart();
+            }, 100); // Pequeno delay de 100ms
+            
+            return () => clearTimeout(timeoutId);
+        }
+    }, [token]);
+
+    // Recalcula total quando cart ou products mudam
+    useEffect(() => {
+        if (cart.length > 0 && products.length > 0) {
+            totalItems();
+        }
+    }, [cart, products]);
 
     return (
         <ShopContext.Provider value={{
@@ -146,11 +230,11 @@ export const ShopProvider = ({ children }: { children: React.ReactNode }) => {
             latesteProducts, setLatestProducts,
             bestSallers, setBestSallers,
             search, setSearch, setShowSearch, showSearch,
-
-            cart, setCart, addToCart, removeProduct, totalItems, setTotalValue, totalValue
-
+            cart, setCart, addToCart, removeProduct, totalItems, setTotalValue, totalValue,
+            gettinProducts
         }}>
             {children}
         </ShopContext.Provider>
     );
 };
+// ...existing code...

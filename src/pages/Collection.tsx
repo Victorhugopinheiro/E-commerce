@@ -64,6 +64,9 @@ function Collection() {
 
   const changeSubcategory = (e: React.ChangeEvent<HTMLInputElement>) => {
 
+    alert(e.target.value)
+    
+
     if (subCategory.includes(e.target.value)) {
       setSubCategory(prev => prev.filter(cat => cat !== e.target.value));
     } else {
@@ -122,8 +125,9 @@ function Collection() {
   useEffect(() => {
 
     gettingFilteredProducts();
+ 
 
-  }, [category, subCategory, search, showSearch]);
+  }, [category, subCategory, search, showSearch, products]);
 
   useEffect(() => {
     sortItems()
@@ -149,14 +153,14 @@ function Collection() {
 
           <Checkbox onChange={changeCategory} title="HOMEM" value="Men" />
           <Checkbox onChange={changeCategory} title="MULHER" value="Women" />
-          <Checkbox onChange={changeCategory} title="CRINAÇA" value="Kids" />
+          <Checkbox onChange={changeCategory} title="CRIANÇA" value="Kids" />
 
         </div>
 
         <div className={`flex flex-col my-2 justify-center gap-2 border p-4  border-gray-300 ${showFilters ? "" : "hidden"}`}>
           <p className="mb-1 font-medium">TIPO</p>
 
-          <Checkbox onChange={changeSubcategory} title="CAMISETAS" value="Topwear" />
+          <Checkbox onChange={changeSubcategory} title="CAMISETAS" value="Topwear"/> 
           <Checkbox onChange={changeSubcategory} title="AGASALHOS" value="Winterwear" />
           <Checkbox onChange={changeSubcategory} title="BERMUDAS" value="Bottomwear" />
         </div>
