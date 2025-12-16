@@ -1,69 +1,21 @@
-# React + TypeScript + Vite
+nterface de usuário moderna, rápida e totalmente responsiva para a plataforma de e-commerce. O projeto foi construído focando na User Experience (UX), garantindo que o fluxo de compra, desde a navegação pelos produtos até o checkout, seja fluido e intuitivo.
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Destaques Técnicos
+Design Responsivo: Utilização de Tailwind CSS para garantir uma experiência perfeita em dispositivos móveis, tablets e desktops.
 
-Currently, two official plugins are available:
+Consumo de API: Integração assíncrona com o backend via Axios, com tratamento de estados de carregamento e erros.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Gestão de Estado: Controle eficiente do carrinho de compras e filtros de categorias em tempo real.
 
-## Expanding the ESLint configuration
+Componentização: Código organizado em componentes reutilizáveis, seguindo os princípios de modularidade do React.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+Tecnologias Utilizadas
+React.js
 
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+TypeScript
 
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
+Tailwind CSS
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+Axios
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+React Router Dom
