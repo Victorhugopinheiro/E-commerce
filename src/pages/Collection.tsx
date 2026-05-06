@@ -66,7 +66,6 @@ function Collection() {
 
     alert(e.target.value)
     
-
     if (subCategory.includes(e.target.value)) {
       setSubCategory(prev => prev.filter(cat => cat !== e.target.value));
     } else {

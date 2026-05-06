@@ -52,8 +52,8 @@ const Navbar = () => {
 
                         <div className='group-hover:block hidden absolute dropdown-menu right-0 pt-4'>
                             <div className='flex flex-col gap-2 w-36 py-3 px-5 bg-slate-100 text-gray-400'>
-                                <p className='cursor-pointer hover:text-black'>Meu Perfil</p>
-                                <p className='cursor-pointer hover:text-black'>Pedidos</p>
+                                <NavLink to={'/'} className='cursor-pointer hover:text-black'>Meu Perfil</NavLink>
+                                <NavLink to={'/orders'} className='cursor-pointer hover:text-black'>Pedidos</NavLink>
                                 <p onClick={() => signOut()} className='cursor-pointer hover:text-black'>Sair</p>
                             </div>
                         </div></>
@@ -87,9 +87,9 @@ const Navbar = () => {
                         </div>
 
                         <NavLink onClick={() => setControlMenu(false)} to={'/'} className={'py-2 pl-6 border-b hover:text-black'}>HOME</NavLink>
-                        <NavLink onClick={() => setControlMenu(false)} to={'/'} className={'py-2 pl-6 border-b hover:text-black'}>COLEÇÃO</NavLink>
-                        <NavLink onClick={() => setControlMenu(false)} to={'/'} className={'py-2 pl-6 border-b hover:text-black'}>SOBRE</NavLink>
-                        <NavLink onClick={() => setControlMenu(false)} to={'/'} className={'py-2 pl-6 border-b hover:text-black'}>CONTATO</NavLink>
+                        <NavLink onClick={() => setControlMenu(false)} to={'/collection'} className={'py-2 pl-6 border-b hover:text-black'}>COLEÇÃO</NavLink>
+                        <NavLink onClick={() => setControlMenu(false)} to={'/about'} className={'py-2 pl-6 border-b hover:text-black'}>SOBRE</NavLink>
+                        <NavLink onClick={() => setControlMenu(false)} to={'/contact'} className={'py-2 pl-6 border-b hover:text-black'}>CONTATO</NavLink>
 
                     </div>
 

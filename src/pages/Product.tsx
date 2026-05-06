@@ -67,7 +67,7 @@ function Product() {
 
 
           <p className="font-bold mt-2 text-2xl">{currency}{product.price}</p>
-          <p className="text-xl w-full mt-4 lg:w-10/12">R${product.description}</p>
+          <p className="text-xl w-full mt-4 lg:w-10/12">{product.description}</p>
 
           <div className="mt-6">
             <p>Selecione o tamanho</p>
@@ -84,7 +84,7 @@ function Product() {
 
           <button onClick={() => {
             if (addToCart) {
-              addToCart({ productId: product._id, quantity: 1, size: sizeSelected })
+              addToCart({ productId: product._id, quantity: 1, size: sizeSelected, name: product.name })
             }
           }} className="bg-black w-fit text-white px-6 py-3 mt-4 rounded hover:bg-gray-800 transition-colors duration-300">
             Adicionar ao carrinho

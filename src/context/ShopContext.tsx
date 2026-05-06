@@ -5,6 +5,7 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import api from "../service/api";
 import { AuthContext } from "./authContext";
+import axios from "axios";
 
 export interface ProductProps {
     _id: string;
@@ -25,6 +26,7 @@ export interface CartItem {
     productId: string;      // id do produto
     size: string;           // tamanho selecionado
     quantity: number;       // quantidade do produto
+    name?: string;          // nome do produto (opcional, pode ser buscado via productId)
 }
 
 interface ShopContextType {
@@ -55,7 +57,7 @@ interface ShopContextType {
 
 
 
-    removeProduct?: (productId: string, size:string) => void;
+    removeProduct?: (productId: string, size: string) => void;
     totalItems?: () => number;
 
     totalValue?: number;
@@ -70,7 +72,7 @@ export const ShopContext = createContext<ShopContextType | undefined>(undefined)
 // ...existing code...
 
 export const ShopProvider = ({ children }: { children: React.ReactNode }) => {
-    const { token } = useContext(AuthContext)!;
+    const { token, signOut } = useContext(AuthContext)!;
 
     const [currency, setCurrency] = useState<string>("R$");
     const [fee, setFee] = useState<string>("10");
@@ -97,10 +99,11 @@ export const ShopProvider = ({ children }: { children: React.ReactNode }) => {
         }
 
         try {
-            const response = await api.post('/api/cart/add', { 
-                productId: item.productId, 
-                quantity: item.quantity, 
-                size: item.size 
+            const response = await api.post('/api/cart/add', {
+                productId: item.productId,
+                quantity: item.quantity,
+                size: item.size,
+                name: item.name
             }, {
                 headers: { Authorization: `Bearer ${token}` }
             });
@@ -112,6 +115,9 @@ export const ShopProvider = ({ children }: { children: React.ReactNode }) => {
         } catch (error: any) {
             console.error("Error adding to cart:", error);
             toast.error("Erro ao adicionar produto ao carrinho.");
+            if (axios.isAxiosError(error) && error.response?.status === 401) {
+                signOut();
+            }
         }
     }
 
@@ -129,10 +135,14 @@ export const ShopProvider = ({ children }: { children: React.ReactNode }) => {
                 toast.success("Produto removido do carrinho!")
             } else {
                 toast.error("Erro ao remover produto do carrinho!")
+
             }
         } catch (error) {
             console.error("Error removing product:", error);
             toast.error("Erro ao remover produto.");
+            if (axios.isAxiosError(error) && error.response?.status === 401) {
+                signOut();
+            }
         }
     }
 
@@ -151,7 +161,7 @@ export const ShopProvider = ({ children }: { children: React.ReactNode }) => {
     const gettinProducts = async () => {
         try {
             const response = await api.get('/api/products/list');
-            
+
             if (response.data.success) {
                 setProducts(response.data.products);
                 setLatestProducts(response.data.products.slice(0, 10));
@@ -159,10 +169,12 @@ export const ShopProvider = ({ children }: { children: React.ReactNode }) => {
             }
         } catch (error) {
             console.error("Error fetching products:", error);
+            toast.error("Erro ao carregar produtos.");
+           
         }
     }
 
-    const getProductsCart = async () => {
+  const getProductsCart = async () => {
         // Verificações mais rigorosas
         if (!token || token === 'undefined' || token === 'null' || token.trim() === '') {
             console.log("Token inválido para buscar carrinho:", token);
@@ -171,8 +183,8 @@ export const ShopProvider = ({ children }: { children: React.ReactNode }) => {
 
         try {
             console.log("Buscando carrinho com token válido:", token.substring(0, 20) + "...");
-            
-            const response = await api.post('/api/cart/items', {
+
+            const response = await api.post('/api/cart/items', {}, {
                 headers: { 
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
@@ -181,18 +193,19 @@ export const ShopProvider = ({ children }: { children: React.ReactNode }) => {
 
             if (response.data.success) {
                 setCart(response.data.cart || []);
-                console.log('Carrinho carregado com sucesso:', response.data.cart);
-            }
-        } catch (error: any) {
-            console.error("Erro completo ao buscar carrinho:", {
-                status: error.response?.status,
-                data: error.response?.data,
-                headers: error.response?.headers,
-                token: token?.substring(0, 20) + "..."
-            });
             
-            if (error.response?.status === 401) {
-                console.log("Token não autorizado para carrinho - verificar backend");
+            }
+        } catch (error: unknown) {
+            if (axios.isAxiosError(error)) {
+                console.error("Erro completo ao buscar carrinho:", {
+                    status: error.response?.status,
+                    data: error.response?.data,
+                    token: token?.substring(0, 20) + "..."
+                });
+
+                if (error.response?.status === 401) {
+                    console.log("Token não autorizado para carrinho");
+                }
             }
         }
     };
@@ -202,16 +215,13 @@ export const ShopProvider = ({ children }: { children: React.ReactNode }) => {
         gettinProducts();
     }, []);
 
-    // Aguarda token válido antes de buscar carrinho
-    useEffect(() => {
-        console.log("Token mudou:", token ? token.substring(0, 20) + "..." : "sem token");
-        
-        // Delay para garantir que o token foi completamente inicializado
-        if (token && token !== 'undefined' && token !== 'null') {
+  
+     useEffect(() => {
+        if (token && token !== 'undefined' && token !== 'null' && token.trim() !== '') {
             const timeoutId = setTimeout(() => {
                 getProductsCart();
-            }, 100); // Pequeno delay de 100ms
-            
+            }, 100);
+
             return () => clearTimeout(timeoutId);
         }
     }, [token]);
