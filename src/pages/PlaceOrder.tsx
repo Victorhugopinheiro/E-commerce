@@ -1,75 +1,44 @@
-import { useContext, useEffect, useState } from "react"
-import { assets } from "../assets/assets"
+import { useContext } from "react"
+
 import CartTotal from "../components/cart/CartTotal"
-import InputComponent from "../components/PlaceOrder/InputComponent"
 import Tittle from "../components/Tittle"
 
 import api from "../service/api"
 import { AuthContext } from "../context/authContext"
 import { ShopContext } from "../context/ShopContext"
 import { toast } from "react-toastify"
-import { Field, FieldDescription, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field"
+import { Field, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Controller } from "react-hook-form"
 import { validateOrder, type ZodOrderTypes } from "@/types/zodTypes/orderType"
 import type { AddressType } from "@/types/addressType"
-import { set } from "zod"
+
+import { useAddresses } from "@/hooks/UseAddressesHook"
+import { useMutateAddress } from "@/hooks/useMutateAddress"
 
 
 function PlaceOrder() {
 
-  const [addresses, setAddresses] = useState<AddressType | null>(null)
 
 
 
-  const [firstName, setFirstName] = useState('')
-  const [lastName, setLastName] = useState('')
-  const [email, setEmail] = useState('')
-  const [street, setStreet] = useState('')
-  const [city, setCity] = useState('')
-  const [state, setState] = useState('')
-  const [zipCode, setZipCode] = useState('')
-  const [country, setCountry] = useState('')
-  const [phone, setPhone] = useState('')
-  const [paymentMethod, setPaymentMethod] = useState('')
-
-  const { token, user } = useContext(AuthContext)!
+  const { token } = useContext(AuthContext)!
   const { cart } = useContext(ShopContext)!
+  const mutateAddress = useMutateAddress(token ?? null)
+  const { data: addresses, isLoading, error } = useAddresses(token!)
 
+  if (isLoading) {
+    return <div>Carregando...</div>
+  }
 
-
-  useEffect(() => {
-
-    if (!token) return
-
-    async function fetchAddress() {
-      try {
-        const response = await api.get("/api/users/userDetails", {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        })
-
-        if (response.data.userAddresses && response.data.userAddresses.length > 0) {
-          console.log("User details response:", response.data.userAddresses);
-          setAddresses(response.data.addresses?.[0] ?? null)
-
-        }
-
-      }
-      catch (error) {
-        console.error("Error fetching address:", error);
-        toast.error('Erro ao buscar endereço. Tente novamente.');
-      }
-    }
-
-    fetchAddress()
+  if (error) {
+    return <div>Erro ao carregar endereço: {error.message}</div>
+  }
 
 
 
 
-  }, [token])
 
 
 
@@ -116,44 +85,21 @@ function PlaceOrder() {
 
 
   async function onSubmit(data: ZodOrderTypes) {
-
-    console.log('Dados do formulário:', data);
+    if (!token) {
+      toast.error('Usuário não autenticado. Faça login para adicionar um endereço.');
+      return;
+    }
 
     try {
 
-      const addAddressResponse = await api.post("/api/address/addAddress", {
+      await mutateAddress.mutateAsync({
         street: data.street,
         city: data.city,
         state: data.state,
         zipCode: data.zipCode,
         country: data.country,
         phone: data.phone
-      }, {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
       })
-
-      if (addAddressResponse.data.success) {
-        setAddresses({
-          street: data.street,
-          city: data.city,
-          state: data.state,
-          zipCode: data.zipCode,
-          country: data.country,
-          phone: data.phone
-        })
-
-
-
-        toast.success('Endereço adicionado com sucesso!')
-      } else {
-        toast.error('Erro ao adicionar endereço. Tente novamente.')
-        return;
-      }
-
-
-
 
 
     }
@@ -166,28 +112,7 @@ function PlaceOrder() {
   }
 
 
-  async function addAddress({ city, country, phone, state, street, zipCode }: AddressType) {
 
-    const response = await api.post("/api/address/addAddress", {
-      street,
-      city,
-      state,
-      zipCode,
-      country,
-      phone,
-
-    }, {
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-    })
-
-    if (response.data.success) {
-      toast.success('Endereço adicionado com sucesso!')
-    } else {
-      toast.error('Erro ao adicionar endereço. Tente novamente.')
-    }
-  }
 
   return (
     <div className="flex bg-r flex-col lg:flex-row  lg:justify-center mx-auto">
