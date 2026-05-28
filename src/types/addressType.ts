@@ -5,5 +5,6 @@ export interface AddressType {
     zipCode: string;
     country: string;
     phone: string;
-    
+    _id?: string;
+    isPrimary?: boolean;
 }

@@ -15,7 +15,7 @@ function CartTotal() {
                 <div className='flex justify-between'>
 
                     <p>Subtotal</p>
-                    <p>{currency}{totalValue},00</p>
+                    <p>{currency}{totalValue}</p>
                     
                 </div>
                 <hr  className='text-gray-400'/>
@@ -24,7 +24,7 @@ function CartTotal() {
                 <div className='flex justify-between'>
 
                     <p>Frete</p>
-                    <p>{currency}{fee},00</p>
+                    <p>{currency}{fee}</p>
                     
                 </div>
                 <hr className='text-gray-400'/>
@@ -33,7 +33,7 @@ function CartTotal() {
                 <div className='flex justify-between'>
 
                     <p className='font-bold'>Total</p>
-                    <p className='font-bold'>{currency}{(Number(totalValue) + Number(fee))},00</p>
+                    <p className='font-bold'>{currency}{(Number(totalValue) + Number(fee))}</p>
                     
                 </div>
                 

@@ -1,9 +1,16 @@
-import { AuthContext } from "@/context/authContext"
+
 import api from "@/service/api"
 import type { AddressType } from "@/types/addressType"
 import { useQuery } from "@tanstack/react-query"
 
 
+export interface UseAddressesResult {
+    userAddresses: AddressType[] | null
+    userInfo: {
+        name: string
+        phone: string
+    }
+}
 
 
 export function useAddresses(token: string | null) {
@@ -11,10 +18,11 @@ export function useAddresses(token: string | null) {
         queryKey: ['addresses', token],
         queryFn: async () => {
             if (!token) throw new Error('Token is required')
-            const { data } = await api.get('/api/users/userDetails', {
+            const { data }  = await api.get('/api/users/userDetails', {
                 headers: { Authorization: `Bearer ${token}` }
-            })
-            return data as AddressType
+            }) as { data: UseAddressesResult }
+          
+            return data
         },
         enabled: !!token,
         staleTime: 1000 * 60 * 10,

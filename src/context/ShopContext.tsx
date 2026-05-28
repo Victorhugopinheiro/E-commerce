@@ -75,7 +75,7 @@ export const ShopProvider = ({ children }: { children: React.ReactNode }) => {
     const { token, signOut } = useContext(AuthContext)!;
 
     const [currency, setCurrency] = useState<string>("R$");
-    const [fee, setFee] = useState<string>("10");
+    const [fee, setFee] = useState<string>(`${localStorage.getItem("selectedShipping") ? JSON.parse(localStorage.getItem("selectedShipping")!).price : "0"}`);
     const [products, setProducts] = useState<ProductProps[]>([]);
 
     const [latesteProducts, setLatestProducts] = useState<ProductProps[]>([]);
