@@ -16,11 +16,11 @@ import { useCalculateFee,  } from "@/hooks/useCalculateFee"
 
 
 function PlaceOrder() {
-  const { token } = useContext(AuthContext)!
+  const {  authenticated } = useContext(AuthContext)!
   const { cart } = useContext(ShopContext)!
-  const mutateAddress = useMutateAddress(token ?? null)
-  const { data: addresses, isLoading, error } = useAddresses(token!)
-  const { data: shippingFee } = useCalculateFee(token!)
+  const mutateAddress = useMutateAddress(authenticated ?? null)
+  const { data: addresses, isLoading, error } = useAddresses(authenticated!)
+  const { data: shippingFee } = useCalculateFee(authenticated!)
  
 
  
@@ -58,10 +58,6 @@ function PlaceOrder() {
         },
         paymentMethod: "stripe"
 
-      }, {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
       })
 
       if (response.data.success) {
@@ -80,7 +76,7 @@ function PlaceOrder() {
 
 
   async function onSubmit(data: ZodOrderTypes) {
-    if (!token) {
+    if (!authenticated) {
       toast.error('Usuário não autenticado. Faça login para adicionar um endereço.');
       return;
     }

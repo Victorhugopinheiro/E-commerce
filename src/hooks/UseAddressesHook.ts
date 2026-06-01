@@ -13,18 +13,18 @@ export interface UseAddressesResult {
 }
 
 
-export function useAddresses(token: string | null) {
+export function useAddresses(authenticated: boolean | null) {
     return useQuery({
-        queryKey: ['addresses', token],
+        queryKey: ['addresses', authenticated],
         queryFn: async () => {
-            if (!token) throw new Error('Token is required')
+            if (!authenticated) throw new Error('authenticated is required')
             const { data }  = await api.get('/api/users/userDetails', {
-                headers: { Authorization: `Bearer ${token}` }
+                headers: { Authorization: `Bearer ${authenticated}` }
             }) as { data: UseAddressesResult }
           
             return data
         },
-        enabled: !!token,
+        enabled: !!authenticated,
         staleTime: 1000 * 60 * 10,
     })
 

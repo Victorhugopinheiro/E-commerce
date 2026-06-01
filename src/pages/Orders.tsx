@@ -10,24 +10,20 @@ import type { CreateOrderRequest } from "../types/order"
 function Orders() {
 
   const { products, currency, } = useContext(ShopContext)!
-  const { token } = useContext(AuthContext)!
+  const { authenticated } = useContext(AuthContext)!
 
   const [productsOrders, setProductsOrders] = useState<CreateOrderRequest[] | []>([])
 
   const gettingUserOrders = async () => {
     try {
-      const response = await api.post('/api/orders/user-orders', {}, {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      })
+      const response = await api.post('/api/orders/user-orders', {})
 
 
       if (response.data.success) {
 
         setProductsOrders(response.data.orders)
 
-        console.log(response.data)
+      
       } else {
         toast.error("Erro ao buscar pedidos")
       }
@@ -43,7 +39,7 @@ function Orders() {
 
     gettingUserOrders()
 
-  }, [token])
+  }, [authenticated])
 
   return (
     <div className="flex flex-col">

@@ -3,11 +3,11 @@ import api from '@/service/api'
 import type { AddressType } from '@/types/addressType'
 import { toast } from 'react-toastify'
 
-export function useMutateAddress(token: string | null) {
+export function useMutateAddress(authenticated: boolean | null) {
   const queryClient = useQueryClient()
 
-  if(!token) {
-    throw new Error('Token é necessário para mutação de endereço')
+  if(!authenticated) {
+    throw new Error('authenticated é necessário para mutação de endereço')
   }
 
   return useMutation({
@@ -19,15 +19,13 @@ export function useMutateAddress(token: string | null) {
         zipCode: addressData.zipCode,
         country: addressData.country,
         phone: addressData.phone,
-      }, {
-        headers: { Authorization: `Bearer ${token}` }
       })
       return response.data
     },
     
     onSuccess: () => {
       // 🎯 Invalidar cache para forçar refetch automático
-      queryClient.invalidateQueries({ queryKey: ['addresses', token] })
+      queryClient.invalidateQueries({ queryKey: ['addresses', authenticated] })
       toast.success('Endereço adicionado com sucesso!')
     },
     

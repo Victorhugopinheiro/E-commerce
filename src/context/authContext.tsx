@@ -30,14 +30,8 @@ export const AuthContext = createContext({} as AuthContextType);
 export function AuthProvider({ children }: { children: React.ReactNode }) {
     const [authenticated, setAuthenticated] = useState<boolean>(false);
     const [user, setUser] = useState<User | null>(null);
-    const [token, setToken] = useState<string | null>(() => {
-        const saved = localStorage.getItem("token");
-        if (saved) {
-            api.defaults.headers.common['Authorization'] = `Bearer ${saved}`
-        }
+    const [loading, setLoading] = useState<boolean>(true);
 
-        return saved || null;
-    })
 
     const navigate = useNavigate();
 
@@ -51,15 +45,25 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
             const response = await api.post('/api/users/login', { email, password });
 
-            if (response.data.success && response.data.token) {
-                localStorage.setItem('token', response.data.token);
-                setToken(response.data.token);
-                setUser(response.data.user);
+            if (response.data.success) {
+                toast.success('Logado com sucesso!')
                 setAuthenticated(true);
                 navigate('/');
             } else {
-                localStorage.removeItem('token');
-                setAuthenticated(false);
+                try {
+                    const response = await api.post('/api/users/logout');
+                    if (response.data.success) {
+                        toast.success('Deslogado com sucesso!')
+                    }
+
+                } catch (error) {
+                    localStorage.removeItem('token');
+                    setAuthenticated(false);
+                } finally {
+                    setAuthenticated(false);
+                }
+
+
             }
 
         } catch (error) {
@@ -77,51 +81,90 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             const response = await api.post('/api/users/register', { email, password, username });
 
 
-            if (response.data.success && response.data.user.token) {
-                localStorage.setItem('token', response.data.user.token);
-                setToken(response.data.user.token);
-                setUser(response.data.user);
+            if (response.data.success) {
                 setAuthenticated(true);
+                toast.success('Cadastro realizado com sucesso!')
                 navigate('/');
             } else {
 
-                localStorage.removeItem('token');
-                setAuthenticated(false);
+                try {
+                    const response = await api.post('/api/users/logout');
+                    if (response.data.success) {
+                        toast.success('Deslogado com sucesso!')
+                    }
+
+                } catch (error) {
+                    localStorage.removeItem('token');
+                    setAuthenticated(false);
+                } finally {
+                    setAuthenticated(false);
+                }
             }
         } catch (error) {
-
-            setToken(null);
             setAuthenticated(false);
             console.error("Error during sign up:", error);
         }
     }
 
-    const signOut = () => {
-        toast.success('Deslogado com sucesso!')
-        localStorage.removeItem('token');
-        setToken(null);
-        setUser(null);
-        setAuthenticated(false);
-        navigate('/login');
+    const signOut = async () => {
+
+        try {
+            const response = await api.post('/api/users/logout');
+            if (response.data.success) {
+                toast.success('Deslogado com sucesso!')
+                setAuthenticated(false);
+                navigate('/login');
+            }
+
+        } catch (error) {
+           
+            setAuthenticated(false);
+        } finally {
+            setAuthenticated(false);
+            setUser(null);
+            setAuthenticated(false);
+            navigate('/login');
+        }
 
 
     }
 
     useEffect(() => {
-        if (token) {
-            setAuthenticated(true);
-            navigate('/');
 
-        } else {
-            navigate('/login');
-            setAuthenticated(false);
+        const validatingAuth = async () => {
+            try {
+                setLoading(true);
+
+
+                const response = await api.get('/api/users/userDetails');
+
+                if (response.data.success) {
+                    setAuthenticated(true);
+                    setUser(response.data.user);
+                    
+
+                }
+
+            } catch (error) {
+                console.error("Error validating auth:", error);
+                setAuthenticated(false);
+                navigate('/login');
+            } finally {
+                setLoading(false);
+
+            }
+
+
         }
 
+        validatingAuth();
+
+
         return () => { };
-    }, [])
+    }, [navigate]);
 
     return (
-        <AuthContext.Provider value={{ authenticated, user, setUser, setAuthenticated, signIn, signOut, signUp, token, setToken }}>
+        <AuthContext.Provider value={{ authenticated, user, setUser, setAuthenticated, signIn, signOut, signUp }}>
             {children}
         </AuthContext.Provider>
     )

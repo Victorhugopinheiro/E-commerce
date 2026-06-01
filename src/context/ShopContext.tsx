@@ -72,7 +72,7 @@ export const ShopContext = createContext<ShopContextType | undefined>(undefined)
 // ...existing code...
 
 export const ShopProvider = ({ children }: { children: React.ReactNode }) => {
-    const { token, signOut } = useContext(AuthContext)!;
+    const {  signOut, authenticated } = useContext(AuthContext)!;
 
     const [currency, setCurrency] = useState<string>("R$");
     const [fee, setFee] = useState<string>(`${localStorage.getItem("selectedShipping") ? JSON.parse(localStorage.getItem("selectedShipping")!).price : "0"}`);
@@ -93,7 +93,7 @@ export const ShopProvider = ({ children }: { children: React.ReactNode }) => {
             return
         }
 
-        if (!token) {
+        if (!authenticated) {
             toast.error("Você precisa estar logado para adicionar ao carrinho.");
             return;
         }
@@ -104,8 +104,6 @@ export const ShopProvider = ({ children }: { children: React.ReactNode }) => {
                 quantity: item.quantity,
                 size: item.size,
                 name: item.name
-            }, {
-                headers: { Authorization: `Bearer ${token}` }
             });
 
             if (response.data.success) {
@@ -122,12 +120,12 @@ export const ShopProvider = ({ children }: { children: React.ReactNode }) => {
     }
 
     const removeProduct = async (productId: string, size: string) => {
-        if (!token) return;
+        if (!authenticated) return;
 
         try {
             const response = await api.delete('/api/cart/remove', {
                 data: { productId, size },
-                headers: { Authorization: `Bearer ${token}` }
+               
             });
 
             if (response.data.success) {
@@ -176,19 +174,16 @@ export const ShopProvider = ({ children }: { children: React.ReactNode }) => {
 
   const getProductsCart = async () => {
         // Verificações mais rigorosas
-        if (!token || token === 'undefined' || token === 'null' || token.trim() === '') {
-            console.log("Token inválido para buscar carrinho:", token);
+        if (!authenticated ) {
+            console.log("Token inválido para buscar carrinho:");
             return;
         }
 
         try {
-            console.log("Buscando carrinho com token válido:", token.substring(0, 20) + "...");
+           
 
             const response = await api.post('/api/cart/items', {}, {
-                headers: { 
-                    'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'application/json'
-                }
+               
             });
 
             if (response.data.success) {
@@ -200,7 +195,7 @@ export const ShopProvider = ({ children }: { children: React.ReactNode }) => {
                 console.error("Erro completo ao buscar carrinho:", {
                     status: error.response?.status,
                     data: error.response?.data,
-                    token: token?.substring(0, 20) + "..."
+                 
                 });
 
                 if (error.response?.status === 401) {
@@ -217,14 +212,14 @@ export const ShopProvider = ({ children }: { children: React.ReactNode }) => {
 
   
      useEffect(() => {
-        if (token && token !== 'undefined' && token !== 'null' && token.trim() !== '') {
+        if (authenticated) {
             const timeoutId = setTimeout(() => {
                 getProductsCart();
             }, 100);
 
             return () => clearTimeout(timeoutId);
         }
-    }, [token]);
+    }, [authenticated]);
 
     // Recalcula total quando cart ou products mudam
     useEffect(() => {

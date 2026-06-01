@@ -65,17 +65,17 @@ export interface FinalData {
 
 }
 
-export function useCalculateFee(token: string | null) {
+export function useCalculateFee(authenticated: boolean | null) {
 
-    const addressesData = useAddresses(token)
+    const addressesData = useAddresses(authenticated)
     const primaryAddress = addressesData.data?.userAddresses?.find((address) => address.isPrimary)
 
     return useQuery({
-        queryKey: ['calculateFee', token],
+        queryKey: ['calculateFee', authenticated],
 
 
         queryFn: async () => {
-            if (!token) throw new Error('Token is required')
+            if (!authenticated) throw new Error('authenticated is required')
             if (!primaryAddress) throw new Error('Primary address is required')
 
             const response = await api.post("/api/shipping/calculateShipping", {
@@ -87,10 +87,6 @@ export function useCalculateFee(token: string | null) {
                 "weight": 4.2,
                 "quantity": 1,
                 "value": 49.99
-            }, {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
             })
 
             return response.data as FinalData
