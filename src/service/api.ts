@@ -1,14 +1,14 @@
 import axios from 'axios';
 
 const api = axios.create({
-    baseURL: import.meta.env.VITE_API_BASE_URL,
-
-    timeout: 10000,
+  baseURL: import.meta.env.VITE_API_BASE_URL,
+  withCredentials: true,
+  timeout: 10000,
 });
 
 
 if (import.meta.env.DEV) {
-  console.log('[API] baseURL =',import.meta.env.VITE_API_BASE_URL,);
+  console.log('[API] baseURL =', import.meta.env.VITE_API_BASE_URL,);
 }
 
 export default api;

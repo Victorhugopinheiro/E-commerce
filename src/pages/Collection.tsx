@@ -64,9 +64,6 @@ function Collection() {
 
   const changeSubcategory = (e: React.ChangeEvent<HTMLInputElement>) => {
 
-    alert(e.target.value)
-    
-
     if (subCategory.includes(e.target.value)) {
       setSubCategory(prev => prev.filter(cat => cat !== e.target.value));
     } else {
@@ -76,6 +73,7 @@ function Collection() {
 
   const sortItems = () => {
 
+  
     const showProducts = [...filterProducts];
 
     switch (sortProducts) {
@@ -96,6 +94,8 @@ function Collection() {
   }
 
   const gettingFilteredProducts = () => {
+   
+    
 
     if (search && showSearch) {
       const filtered = products!.filter(product =>
@@ -106,9 +106,16 @@ function Collection() {
       return;
     }
 
+    
+    if (category.length > 0 && subCategory.length > 0) {
+     
+      const filtered = products!.filter(product => category.includes(product.category) && subCategory.includes(product.subCategory))
+      setFilterProducts(filtered);
+      return
+    }
 
     if (category.length > 0) {
-      const filtered = products!.filter(product => category.includes(product.category));
+      const filtered = products!.filter(product => category.includes(product.category))
       setFilterProducts(filtered);
       return
     }
@@ -119,15 +126,16 @@ function Collection() {
       return
     }
 
+
     setFilterProducts(products!);
   }
 
   useEffect(() => {
 
     gettingFilteredProducts();
- 
 
-  }, [category, subCategory, search, showSearch, products]);
+
+  }, [category, subCategory, search, showSearch, products, sortProducts]);
 
   useEffect(() => {
     sortItems()
@@ -160,7 +168,7 @@ function Collection() {
         <div className={`flex flex-col my-2 justify-center gap-2 border p-4  border-gray-300 ${showFilters ? "" : "hidden"}`}>
           <p className="mb-1 font-medium">TIPO</p>
 
-          <Checkbox onChange={changeSubcategory} title="CAMISETAS" value="Topwear"/> 
+          <Checkbox onChange={changeSubcategory} title="CAMISETAS" value="Topwear" />
           <Checkbox onChange={changeSubcategory} title="AGASALHOS" value="Winterwear" />
           <Checkbox onChange={changeSubcategory} title="BERMUDAS" value="Bottomwear" />
         </div>
