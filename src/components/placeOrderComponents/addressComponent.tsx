@@ -41,6 +41,7 @@ interface AddressComponentProps {
   onSubmit: (data: ZodOrderTypes) => void
   mutateAddress: any
   fretes?: ShippingQuote[] | null
+  loadingFee?: boolean
 }
 
 export default function AddressComponent({
@@ -50,7 +51,8 @@ export default function AddressComponent({
   form,
   onSubmit,
   mutateAddress,
-  fretes
+  fretes,
+  loadingFee
 }: AddressComponentProps) {
   if (isLoading) {
     return <div>Carregando...</div>
@@ -76,7 +78,7 @@ export default function AddressComponent({
       return
     }
 
-   
+
 
     localStorage.setItem("selectedShipping", JSON.stringify(findFrete))
     console.log("6. localStorage saved:", localStorage.getItem("selectedShipping"))
@@ -301,17 +303,22 @@ export default function AddressComponent({
 
         <Card size="sm" className="mx-auto w-full max-w-sm">
           <CardHeader>
-            <CardTitle>Escolha seu Eniva</CardTitle>
+            <CardTitle>Escolha seu envio</CardTitle>
             <CardDescription>
               Fretes
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <RadioGroup onValueChange={(e) => handleAddAddress(e)} defaultValue={fretes && fretes.length > 0 ? `${fretes[0].id}` : ""} className="w-full">
+            <RadioGroup onValueChange={(e) => handleAddAddress(e)} className="w-full">
+
+              {loadingFee ? (
+                <div>Calculando frete...</div>
+              ) : (<>
+              </>)}
 
               {fretes && fretes.length > 0 && fretes.map((frete, index) => {
 
-                const findLocalStorageFrete = localStorage.getItem("selectedShipping")
+
 
                 return (
                   <div key={frete.id} className="flex w-full items-center gap-3">

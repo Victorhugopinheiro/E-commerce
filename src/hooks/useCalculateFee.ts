@@ -67,8 +67,7 @@ export interface FinalData {
 
 export function useCalculateFee(authenticated: boolean | null) {
 
-    const addressesData = useAddresses(authenticated)
-    const primaryAddress = addressesData.data?.userAddresses?.find((address) => address.isPrimary)
+
 
     return useQuery({
         queryKey: ['calculateFee', authenticated],
@@ -76,7 +75,7 @@ export function useCalculateFee(authenticated: boolean | null) {
 
         queryFn: async () => {
             if (!authenticated) throw new Error('authenticated is required')
-            if (!primaryAddress) throw new Error('Primary address is required')
+
 
             const response = await api.post("/api/shipping/calculateShipping", {
                 "destinationCep": "60010-000",

@@ -24,7 +24,7 @@ export function useMutateAddress(authenticated: boolean | null) {
     },
     
     onSuccess: () => {
-      // 🎯 Invalidar cache para forçar refetch automático
+    
       queryClient.invalidateQueries({ queryKey: ['addresses', authenticated] })
       toast.success('Endereço adicionado com sucesso!')
     },

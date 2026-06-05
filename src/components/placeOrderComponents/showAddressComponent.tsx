@@ -28,9 +28,9 @@ interface ShowAddressComponentProps {
 
 export function ShowAddressComponent({ handlingDialogsStates }: ShowAddressComponentProps) {
 
-  const { token } = useContext(AuthContext)!
+  const { authenticated } = useContext(AuthContext)!
 
-  const mutateAddress = useMutateAddress(token ?? null)
+  const mutateAddress = useMutateAddress(authenticated ?? null)
 
   const form = AddAddress()
 

@@ -8,8 +8,8 @@ import { set } from "zod";
 interface AuthContextType {
     authenticated: boolean;
     setAuthenticated: (auth: boolean) => void;
-    token?: string | null;
-    setToken?: (token: string) => void;
+    
+  
     user: User | null;
     setUser: (user: User | null) => void;
 
@@ -154,12 +154,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
             }
 
-
         }
-
         validatingAuth();
-
-
         return () => { };
     }, [navigate]);
 
