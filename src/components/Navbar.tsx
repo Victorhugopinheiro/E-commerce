@@ -8,7 +8,7 @@ const Navbar = () => {
 
     const [controlMenu, setControlMenu] = useState(false)
     const { setShowSearch, cart } = useContext(ShopContext)!;
-    const { token, signOut } = useContext(AuthContext)!;
+    const { authenticated, signOut } = useContext(AuthContext)!;
 
 
     return (
@@ -46,7 +46,7 @@ const Navbar = () => {
                 <img onClick={() => setShowSearch!(true)} src={assets.search_icon} className='w-5 cursor-pointer' />
 
                 <div className='group relative'>
-                    {token ? <>
+                    {authenticated ? <>
 
                         <img src={assets.profile_icon} className='w-5 cursor-pointer' />
 

@@ -87,18 +87,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
                 navigate('/');
             } else {
 
-                try {
-                    const response = await api.post('/api/users/logout');
-                    if (response.data.success) {
-                        toast.success('Deslogado com sucesso!')
-                    }
-
-                } catch (error) {
-                    localStorage.removeItem('token');
-                    setAuthenticated(false);
-                } finally {
-                    setAuthenticated(false);
-                }
+              signOut()
             }
         } catch (error) {
             setAuthenticated(false);

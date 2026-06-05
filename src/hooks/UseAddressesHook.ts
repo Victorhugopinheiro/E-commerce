@@ -18,9 +18,7 @@ export function useAddresses(authenticated: boolean | null) {
         queryKey: ['addresses', authenticated],
         queryFn: async () => {
             if (!authenticated) throw new Error('authenticated is required')
-            const { data }  = await api.get('/api/users/userDetails', {
-                headers: { Authorization: `Bearer ${authenticated}` }
-            }) as { data: UseAddressesResult }
+            const { data }  = await api.get('/api/users/userDetails') as { data: UseAddressesResult }
           
             return data
         },
