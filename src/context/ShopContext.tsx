@@ -36,6 +36,9 @@ interface ShopContextType {
     fee: string;
     setFee: (fee: string) => void;
 
+    feeId: string;
+    setFeeId: (feeId: string) => void;
+
     products?: ProductProps[];
 
     latesteProducts?: ProductProps[];
@@ -76,6 +79,7 @@ export const ShopProvider = ({ children }: { children: React.ReactNode }) => {
 
     const [currency, setCurrency] = useState<string>("R$");
     const [fee, setFee] = useState<string>(`${localStorage.getItem("selectedShipping") ? JSON.parse(localStorage.getItem("selectedShipping")!).price : "0"}`);
+    const [feeId, setFeeId] = useState<string>(`${localStorage.getItem("selectedShipping") ? JSON.parse(localStorage.getItem("selectedShipping")!).id : ""}`);
     const [products, setProducts] = useState<ProductProps[]>([]);
 
     const [latesteProducts, setLatestProducts] = useState<ProductProps[]>([]);
@@ -236,7 +240,7 @@ export const ShopProvider = ({ children }: { children: React.ReactNode }) => {
             bestSallers, setBestSallers,
             search, setSearch, setShowSearch, showSearch,
             cart, setCart, addToCart, removeProduct, totalItems, setTotalValue, totalValue,
-            gettinProducts
+            gettinProducts, feeId, setFeeId
         }}>
             {children}
         </ShopContext.Provider>

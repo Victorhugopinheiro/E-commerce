@@ -14,18 +14,9 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog"
 
-import type { AddressType } from "@/types/addressType"
+
+
 import { SelectAddressComponent } from "./SelectAddressComponent"
 import type { UseAddressesResult } from "@/hooks/UseAddressesHook"
 import { RadioGroup, RadioGroupItem } from "../ui/radio-group"
@@ -33,6 +24,7 @@ import type { ShippingQuote } from "@/hooks/useCalculateFee"
 import { toast } from "react-toastify"
 import { useContext } from "react"
 import { ShopContext } from "@/context/ShopContext"
+import { Loader2 } from "lucide-react"
 interface AddressComponentProps {
   addresses: UseAddressesResult | null
   isLoading: boolean
@@ -61,6 +53,8 @@ export default function AddressComponent({
   if (error) {
     return <div>Erro ao carregar endereço: {error.message}</div>
   }
+
+  const {feeId} = useContext(ShopContext)!
 
   const { setFee } = useContext(ShopContext)!
 
@@ -309,14 +303,13 @@ export default function AddressComponent({
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <RadioGroup onValueChange={(e) => handleAddAddress(e)} className="w-full">
+            <RadioGroup defaultValue={`${feeId}`} onValueChange={(e) => handleAddAddress(e)} className="w-full">
 
-              {loadingFee ? (
-                <div>Calculando frete...</div>
-              ) : (<>
-              </>)}
 
-              {fretes && fretes.length > 0 && fretes.map((frete, index) => {
+
+              {fretes && fretes.length > 0 ? fretes.map((frete, index) => {
+
+                
 
 
 
@@ -336,14 +329,10 @@ export default function AddressComponent({
                     </div>
                   </div>
                 )
-              }).splice(0, 3)}
+              }).splice(0, 3) : <div className="flex justify-center items-center py-4"><Loader2 className="w-6 h-6 animate-spin" /></div>}
             </RadioGroup>
           </CardContent>
-          <CardFooter>
-            <Button variant="outline" size="sm" className="w-full">
-              Action
-            </Button>
-          </CardFooter>
+
         </Card>
 
 
