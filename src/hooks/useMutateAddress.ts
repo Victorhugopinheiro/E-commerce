@@ -6,9 +6,7 @@ import { toast } from 'react-toastify'
 export function useMutateAddress(authenticated: boolean | null) {
   const queryClient = useQueryClient()
 
-  if(!authenticated) {
-    throw new Error('authenticated é necessário para mutação de endereço')
-  }
+ 
 
   return useMutation({
     mutationFn: async (addressData: AddressType) => {
@@ -22,13 +20,13 @@ export function useMutateAddress(authenticated: boolean | null) {
       })
       return response.data
     },
-    
+
     onSuccess: () => {
-      // 🎯 Invalidar cache para forçar refetch automático
+
       queryClient.invalidateQueries({ queryKey: ['addresses', authenticated] })
       toast.success('Endereço adicionado com sucesso!')
     },
-    
+
     onError: (error: any) => {
       const message = error.response?.data?.message || 'Erro ao adicionar endereço'
       toast.error(message)

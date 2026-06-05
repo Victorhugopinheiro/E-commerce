@@ -14,18 +14,9 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog"
 
-import type { AddressType } from "@/types/addressType"
+
+
 import { SelectAddressComponent } from "./SelectAddressComponent"
 import type { UseAddressesResult } from "@/hooks/UseAddressesHook"
 import { RadioGroup, RadioGroupItem } from "../ui/radio-group"
@@ -33,6 +24,7 @@ import type { ShippingQuote } from "@/hooks/useCalculateFee"
 import { toast } from "react-toastify"
 import { useContext } from "react"
 import { ShopContext } from "@/context/ShopContext"
+import { Loader2 } from "lucide-react"
 interface AddressComponentProps {
   addresses: UseAddressesResult | null
   isLoading: boolean
@@ -41,6 +33,7 @@ interface AddressComponentProps {
   onSubmit: (data: ZodOrderTypes) => void
   mutateAddress: any
   fretes?: ShippingQuote[] | null
+  loadingFee?: boolean
 }
 
 export default function AddressComponent({
@@ -50,7 +43,8 @@ export default function AddressComponent({
   form,
   onSubmit,
   mutateAddress,
-  fretes
+  fretes,
+  loadingFee
 }: AddressComponentProps) {
   if (isLoading) {
     return <div>Carregando...</div>
@@ -59,6 +53,8 @@ export default function AddressComponent({
   if (error) {
     return <div>Erro ao carregar endereço: {error.message}</div>
   }
+
+  const {feeId} = useContext(ShopContext)!
 
   const { setFee } = useContext(ShopContext)!
 
@@ -76,7 +72,7 @@ export default function AddressComponent({
       return
     }
 
-   
+
 
     localStorage.setItem("selectedShipping", JSON.stringify(findFrete))
     console.log("6. localStorage saved:", localStorage.getItem("selectedShipping"))
@@ -301,17 +297,21 @@ export default function AddressComponent({
 
         <Card size="sm" className="mx-auto w-full max-w-sm">
           <CardHeader>
-            <CardTitle>Escolha seu Eniva</CardTitle>
+            <CardTitle>Escolha seu envio</CardTitle>
             <CardDescription>
               Fretes
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <RadioGroup onValueChange={(e) => handleAddAddress(e)} defaultValue={fretes && fretes.length > 0 ? `${fretes[0].id}` : ""} className="w-full">
+            <RadioGroup defaultValue={`${feeId}`} onValueChange={(e) => handleAddAddress(e)} className="w-full">
 
-              {fretes && fretes.length > 0 && fretes.map((frete, index) => {
 
-                const findLocalStorageFrete = localStorage.getItem("selectedShipping")
+
+              {fretes && fretes.length > 0 ? fretes.map((frete, index) => {
+
+                
+
+
 
                 return (
                   <div key={frete.id} className="flex w-full items-center gap-3">
@@ -329,14 +329,10 @@ export default function AddressComponent({
                     </div>
                   </div>
                 )
-              }).splice(0, 3)}
+              }).splice(0, 3) : <div className="flex justify-center items-center py-4"><Loader2 className="w-6 h-6 animate-spin" /></div>}
             </RadioGroup>
           </CardContent>
-          <CardFooter>
-            <Button variant="outline" size="sm" className="w-full">
-              Action
-            </Button>
-          </CardFooter>
+
         </Card>
 
 

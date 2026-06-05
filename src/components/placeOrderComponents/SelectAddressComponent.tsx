@@ -37,12 +37,12 @@ export type AddAddressComponentProps = {
 
 export const SelectAddressComponent = ({ addresses }: AddAddressComponentProps) => {
 
-    const { token } = useContext(AuthContext)!
+    const { authenticated } = useContext(AuthContext)!
     const { setFee } = useContext(ShopContext)!
 
     const queryClient = useQueryClient()
 
-    const shippingFee = queryClient.getQueryData(['calculateFee', token]) as FinalData
+    const shippingFee = queryClient.getQueryData(['calculateFee', authenticated]) as FinalData
 
     const [openAddAddress, setOpenAddAddress] = useState(false)
     const [openSelectAddressDialog, setSelectAddressDialog] = useState(false)
@@ -67,15 +67,16 @@ export const SelectAddressComponent = ({ addresses }: AddAddressComponentProps) 
 
             const response = await api.post(`/api/address/changePrimaryAddress/${idAddress}`, {
 
-            }, { headers: { Authorization: `Bearer ${token}` } })
+            })
+            
 
             const findindex = addresses?.userAddresses!.findIndex((address) => address._id === idAddress)
 
 
             if (response.status === 200) {
                 toast.success("Endereço selecionado com sucesso!")
-                queryClient.invalidateQueries({ queryKey: ['addresses', token] })
-                queryClient.invalidateQueries({ queryKey: ['calculateFee'] })
+                queryClient.invalidateQueries({ queryKey: ['addresses', authenticated] })
+                queryClient.invalidateQueries({ queryKey: ['calculateFee', authenticated] })
                 const findLocalStorageFrete = localStorage.getItem("selectedShipping")
                 const formatedFindLocalStorageFrete:ShippingQuote = findLocalStorageFrete ? JSON.parse(findLocalStorageFrete) : null
         
@@ -91,6 +92,9 @@ export const SelectAddressComponent = ({ addresses }: AddAddressComponentProps) 
 
         } catch (error) {
             toast.error("Erro ao selecionar endereço.")
+        }
+        finally {
+            setSelectAddressDialog(false)
         }
 
 

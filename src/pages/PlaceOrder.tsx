@@ -20,7 +20,7 @@ function PlaceOrder() {
   const { cart } = useContext(ShopContext)!
   const mutateAddress = useMutateAddress(authenticated ?? null)
   const { data: addresses, isLoading, error } = useAddresses(authenticated!)
-  const { data: shippingFee } = useCalculateFee(authenticated!)
+  const { data: shippingFee, isLoading:loadingFee } = useCalculateFee(authenticated!)
  
 
  
@@ -29,7 +29,7 @@ function PlaceOrder() {
 
 
 
-  console.log("Shipping Feeee:", shippingFee)
+ 
 
 
   const form = validateOrder()
@@ -115,6 +115,7 @@ function PlaceOrder() {
       <AddressComponent
         addresses={addresses!}
         isLoading={isLoading}
+        loadingFee={loadingFee}
         error={error}
         form={form}
         onSubmit={onSubmit}
