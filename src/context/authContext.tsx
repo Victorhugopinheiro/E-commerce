@@ -35,8 +35,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
     const navigate = useNavigate();
 
-
-
     const signIn = async (email: string, password: string) => {
 
 
