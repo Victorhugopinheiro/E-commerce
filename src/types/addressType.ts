@@ -1,5 +1,6 @@
 export interface AddressType {
     street: string;
+    number: string;
     city: string;
     state: string;
     zipCode: string;
@@ -7,4 +8,5 @@ export interface AddressType {
     phone: string;
     _id?: string;
     isPrimary?: boolean;
+
 }

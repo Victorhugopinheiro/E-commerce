@@ -15,7 +15,7 @@ export interface UseAddressesResult {
 
 export function useAddresses(authenticated: boolean | null) {
     return useQuery({
-        queryKey: ['addresses', authenticated],
+        queryKey: ['addresses'],
         queryFn: async () => {
             if (!authenticated) throw new Error('authenticated is required')
             const { data }  = await api.get('/api/users/userDetails') as { data: UseAddressesResult }
