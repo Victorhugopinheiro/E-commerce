@@ -8,7 +8,6 @@ const api = axios.create({
 
 
 if (import.meta.env.DEV) {
-  console.log('[API] baseURL =', import.meta.env.VITE_API_BASE_URL,);
 }
 
 export default api;
