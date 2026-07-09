@@ -1,10 +1,8 @@
 import { Label } from "@/components/ui/label"
 import {
     Dialog,
-    DialogClose,
     DialogContent,
     DialogDescription,
-    DialogFooter,
     DialogHeader,
     DialogTitle,
     DialogTrigger,
@@ -68,7 +66,7 @@ export const SelectAddressComponent = ({ addresses }: AddAddressComponentProps) 
             const response = await api.post(`/api/address/changePrimaryAddress/${idAddress}`, {
 
             })
-            
+
 
             const findindex = addresses?.userAddresses!.findIndex((address) => address._id === idAddress)
 
@@ -78,8 +76,8 @@ export const SelectAddressComponent = ({ addresses }: AddAddressComponentProps) 
                 queryClient.invalidateQueries({ queryKey: ['addresses', authenticated] })
                 queryClient.invalidateQueries({ queryKey: ['calculateFee', authenticated] })
                 const findLocalStorageFrete = localStorage.getItem("selectedShipping")
-                const formatedFindLocalStorageFrete:ShippingQuote = findLocalStorageFrete ? JSON.parse(findLocalStorageFrete) : null
-        
+                const formatedFindLocalStorageFrete: ShippingQuote = findLocalStorageFrete ? JSON.parse(findLocalStorageFrete) : null
+
                 setFee(formatedFindLocalStorageFrete.price ?? shippingFee?.data[1].price)
                 return
 
@@ -189,16 +187,18 @@ export const SelectAddressComponent = ({ addresses }: AddAddressComponentProps) 
                 {openAddAddress && (
                     <Dialog open={openAddAddress} onOpenChange={(open) => setOpenAddAddress(open)}>
 
-                        <DialogContent>
+
+
+
+                        <DialogContent className="sm:max-w-10/12 lg:max-w-6/12  ">
+
                             <DialogTitle>Adicionar novo endereço</DialogTitle>
                             <DialogDescription>
                                 Preencha os campos para adicionar um novo endereço.
                             </DialogDescription>
-
-                            <DialogContent className="sm:max-w-10/12 lg:max-w-6/12  ">
-                                <ShowAddressComponent handlingDialogsStates={handlingDialogsStates} />
-                            </DialogContent>
+                            <ShowAddressComponent handlingDialogsStates={handlingDialogsStates} />
                         </DialogContent>
+
                     </Dialog>
                 )}
 
