@@ -14,7 +14,7 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
-
+import { type CreateUserIdentificationInput } from "@/hooks/userIdentifications"
 
 
 import { SelectAddressComponent } from "./SelectAddressComponent"
@@ -25,6 +25,7 @@ import { toast } from "react-toastify"
 import { useContext } from "react"
 import { ShopContext } from "@/context/ShopContext"
 import { Loader2 } from "lucide-react"
+import CepComponent from "./_components/cepComponent"
 interface AddressComponentProps {
   addresses: UseAddressesResult | null
   isLoading: boolean
@@ -34,6 +35,7 @@ interface AddressComponentProps {
   mutateAddress: any
   fretes?: ShippingQuote[] | null
   loadingFee?: boolean
+  userIdentifications?: CreateUserIdentificationInput
 }
 
 export default function AddressComponent({
@@ -44,7 +46,8 @@ export default function AddressComponent({
   onSubmit,
   mutateAddress,
   fretes,
-  loadingFee
+  loadingFee,
+  userIdentifications
 }: AddressComponentProps) {
   if (isLoading) {
     return <div>Carregando...</div>
@@ -54,7 +57,7 @@ export default function AddressComponent({
     return <div>Erro ao carregar endereço: {error.message}</div>
   }
 
-  const {feeId} = useContext(ShopContext)!
+  const { feeId } = useContext(ShopContext)!
 
   const { setFee } = useContext(ShopContext)!
 
@@ -75,7 +78,6 @@ export default function AddressComponent({
 
 
     localStorage.setItem("selectedShipping", JSON.stringify(findFrete))
-    console.log("6. localStorage saved:", localStorage.getItem("selectedShipping"))
 
     setFee(findFrete.price)
 
@@ -84,100 +86,60 @@ export default function AddressComponent({
   }
 
   return (
-    <div className="flex flex-col w-full justify-center items-center mx-auto ">
-      <div className="flex w-full   lg:w-12/12 flex-col max-w-[400px] lg:flex-row lg:justify-around lg:items-center">
+    <div className="flex flex-col  w-full justify-center items-center mx-auto ">
+      <div className="flex w-full flex-col  md:max-w-8/12 lg:max-w-10/12 xl:max-w-6/12 lg:justify-around lg:items-center">
 
-        {!addresses ? (
+        {(addresses?.userAddresses?.length ?? 0) <= 0 ? (
           <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col">
             <div className="max-w-[600px] gap-2 flex flex-col justify-center items-center mx-auto">
               <Tittle title1="INFORMAÇÕES" title2="DE ENTREGA" />
 
-              <div className="flex flex-row gap-2 w-full">
-                <FieldGroup className="flex flex-row">
-                  <Controller
-                    name="firstName"
-                    control={form.control}
-                    render={({ field, fieldState }) => (
-                      <Field data-invalid={fieldState.invalid}>
-                        <FieldLabel>Nome</FieldLabel>
-                        <Input
-                          className="h-9"
-                          {...field}
-                          id="firstName"
-                          aria-invalid={fieldState.invalid}
-                          placeholder="Digite seu nome"
-                          autoComplete="off"
-                        />
-                        {fieldState.invalid && (
-                          <FieldError errors={[fieldState.error]} />
-                        )}
-                      </Field>
-                    )}
-                  />
 
-                  <Controller
-                    name="secondName"
-                    control={form.control}
-                    render={({ field, fieldState }) => (
-                      <Field data-invalid={fieldState.invalid}>
-                        <FieldLabel>Sobrenome</FieldLabel>
-                        <Input
-                          className="h-9"
-                          {...field}
-                          id="secondName"
-                          aria-invalid={fieldState.invalid}
-                          placeholder="Digite seu sobrenome"
-                          autoComplete="off"
-                        />
-                        {fieldState.invalid && (
-                          <FieldError errors={[fieldState.error]} />
-                        )}
-                      </Field>
-                    )}
-                  />
-                </FieldGroup>
-              </div>
 
               <FieldGroup className="">
-                <Controller
-                  name="email"
-                  control={form.control}
-                  render={({ field, fieldState }) => (
-                    <Field data-invalid={fieldState.invalid}>
-                      <FieldLabel>Email</FieldLabel>
-                      <Input
-                        className="h-9"
-                        {...field}
-                        id="input-demo-disabled"
-                        type="email"
-                        placeholder="Email"
-                      />
-                      {fieldState.invalid && (
-                        <FieldError errors={[fieldState.error]} />
-                      )}
-                    </Field>
-                  )}
-                />
 
-                <Controller
-                  name="street"
-                  control={form.control}
-                  render={({ field, fieldState }) => (
-                    <Field data-invalid={fieldState.invalid}>
-                      <FieldLabel>Rua</FieldLabel>
-                      <Input
-                        className="h-9"
-                        {...field}
-                        id="input-demo-disabled"
-                        type="text"
-                        placeholder="Rua"
-                      />
-                      {fieldState.invalid && (
-                        <FieldError errors={[fieldState.error]} />
-                      )}
-                    </Field>
-                  )}
-                />
+
+                <div className="flex gap-2">
+                  <Controller
+                    name="street"
+                    control={form.control}
+                    render={({ field, fieldState }) => (
+                      <Field data-invalid={fieldState.invalid}>
+                        <FieldLabel>Rua</FieldLabel>
+                        <Input
+                          className="h-9"
+                          {...field}
+                          id="input-demo-disabled"
+                          type="text"
+                          placeholder="Rua"
+                        />
+                        {fieldState.invalid && (
+                          <FieldError errors={[fieldState.error]} />
+                        )}
+                      </Field>
+                    )}
+                  />
+
+                  <Controller
+                    name="number"
+                    control={form.control}
+                    render={({ field, fieldState }) => (
+                      <Field data-invalid={fieldState.invalid}>
+                        <FieldLabel>Número</FieldLabel>
+                        <Input
+                          className="h-9"
+                          {...field}
+                          id="input-demo-disabled"
+                          type="text"
+                          placeholder="Rua"
+                        />
+                        {fieldState.invalid && (
+                          <FieldError errors={[fieldState.error]} />
+                        )}
+                      </Field>
+                    )}
+                  />
+                </div>
 
                 <div className="flex gap-2">
                   <Controller
@@ -293,9 +255,9 @@ export default function AddressComponent({
 
       </div>
 
-      <div className="w-full mt-10 flex justify-center">
+      <div className="w-full  mt-10 flex justify-center">
 
-        <Card size="sm" className="mx-auto w-full max-w-sm">
+        <Card size="sm" className="mx-auto w-full md:max-w-8/12 lg:max-w-10/12 xl:max-w-6/12">
           <CardHeader>
             <CardTitle>Escolha seu envio</CardTitle>
             <CardDescription>
@@ -309,7 +271,7 @@ export default function AddressComponent({
 
               {fretes && fretes.length > 0 ? fretes.map((frete, index) => {
 
-                
+
 
 
 
@@ -336,6 +298,10 @@ export default function AddressComponent({
         </Card>
 
 
+      </div>
+
+      <div className="w-full mt-10 flex justify-center md:max-w-8/12 lg:max-w-10/12 xl:max-w-6/12">
+        <CepComponent firstName={userIdentifications?.firstName} lastName={userIdentifications?.lastName} userCpf={userIdentifications?.userCpf} />
       </div>
     </div>
   )

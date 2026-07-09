@@ -115,7 +115,6 @@ export const ShopProvider = ({ children }: { children: React.ReactNode }) => {
                 toast.success("Produto adicionado ao carrinho!");
             }
         } catch (error: any) {
-            console.error("Error adding to cart:", error);
             toast.error("Erro ao adicionar produto ao carrinho.");
             if (axios.isAxiosError(error) && error.response?.status === 401) {
                 signOut();
@@ -140,7 +139,6 @@ export const ShopProvider = ({ children }: { children: React.ReactNode }) => {
 
             }
         } catch (error) {
-            console.error("Error removing product:", error);
             toast.error("Erro ao remover produto.");
             if (axios.isAxiosError(error) && error.response?.status === 401) {
                 signOut();
@@ -170,7 +168,6 @@ export const ShopProvider = ({ children }: { children: React.ReactNode }) => {
                 setBestSallers(response.data.products.filter((product: ProductProps) => product.bestseller).slice(0, 5));
             }
         } catch (error) {
-            console.error("Error fetching products:", error);
             toast.error("Erro ao carregar produtos.");
            
         }
@@ -179,7 +176,6 @@ export const ShopProvider = ({ children }: { children: React.ReactNode }) => {
   const getProductsCart = async () => {
         // Verificações mais rigorosas
         if (!authenticated ) {
-            console.log("Token inválido para buscar carrinho:");
             return;
         }
 
@@ -196,15 +192,10 @@ export const ShopProvider = ({ children }: { children: React.ReactNode }) => {
             }
         } catch (error: unknown) {
             if (axios.isAxiosError(error)) {
-                console.error("Erro completo ao buscar carrinho:", {
-                    status: error.response?.status,
-                    data: error.response?.data,
                  
-                });
 
                 if (error.response?.status === 401) {
-                    console.log("Token não autorizado para carrinho");
-                }
+                    signOut();}
             }
         }
     };

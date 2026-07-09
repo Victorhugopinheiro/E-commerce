@@ -3,10 +3,13 @@ import api from '@/service/api'
 import type { AddressType } from '@/types/addressType'
 import { toast } from 'react-toastify'
 
+
+
+
 export function useMutateAddress(authenticated: boolean | null) {
   const queryClient = useQueryClient()
 
- 
+
 
   return useMutation({
     mutationFn: async (addressData: AddressType) => {
@@ -17,14 +20,18 @@ export function useMutateAddress(authenticated: boolean | null) {
         zipCode: addressData.zipCode,
         country: addressData.country,
         phone: addressData.phone,
+        number: addressData.number,
       })
-      return response.data
+      return {
+        data: response.data,
+        message: 'Endereço adicionado com sucesso!',
+        success: response.data.success
+      }
     },
 
     onSuccess: () => {
 
-      queryClient.invalidateQueries({ queryKey: ['addresses', authenticated] })
-      toast.success('Endereço adicionado com sucesso!')
+      queryClient.invalidateQueries({ queryKey: ['addresses'] })
     },
 
     onError: (error: any) => {

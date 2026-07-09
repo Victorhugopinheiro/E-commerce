@@ -33,7 +33,7 @@ function CartTotal() {
                 <div className='flex justify-between'>
 
                     <p className='font-bold'>Total</p>
-                    <p className='font-bold'>{currency}{(Number(totalValue) + Number(fee))}</p>
+                    <p className='font-bold'>{currency}{(Number(totalValue) + Number(fee)).toFixed(2)}</p>
                     
                 </div>
                 

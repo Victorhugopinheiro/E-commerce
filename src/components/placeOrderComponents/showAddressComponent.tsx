@@ -43,6 +43,7 @@ export function ShowAddressComponent({ handlingDialogsStates }: ShowAddressCompo
         zipCode: data.zipCode,
         country: data.country,
         phone: data.phone,
+        number: data.number
 
       })
 
@@ -57,7 +58,7 @@ export function ShowAddressComponent({ handlingDialogsStates }: ShowAddressCompo
     catch (error: any) {
       console.error("Error adding address:", error.response?.data || error.message);
       toast.error(error.response?.data?.message || 'Erro ao adicionar endereço. Tente novamente.');
-    }finally {
+    } finally {
       handlingDialogsStates(false, true)
     }
 
@@ -65,147 +66,169 @@ export function ShowAddressComponent({ handlingDialogsStates }: ShowAddressCompo
 
 
 
-return (
-  <div className="flex w-full justify-center items-center ">
-    <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col">
-      <div className="max-w-[600px] gap-2 flex flex-col justify-center items-center mx-auto">
-        <Tittle title1="INFORMAÇÕES" title2="DE ENTREGA" />
-       
+  return (
+    <div className="flex w-full justify-center items-center ">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col">
+        <div className="max-w-[600px] gap-2 flex flex-col justify-center items-center mx-auto">
+          <Tittle title1="INFORMAÇÕES" title2="DE ENTREGA" />
 
-        <FieldGroup className="">
-          
 
-          <Controller
-            name="street"
-            control={form.control}
-            render={({ field, fieldState }) => (
-              <Field data-invalid={fieldState.invalid}>
-                <FieldLabel>Rua</FieldLabel>
-                <Input
-                  className="h-9"
-                  {...field}
-                  id="input-demo-disabled"
-                  type="text"
-                  placeholder="Rua"
-                />
-                {fieldState.invalid && (
-                  <FieldError errors={[fieldState.error]} />
+          <FieldGroup className="">
+
+
+            <div className="flex gap-2">
+              <Controller
+                name="street"
+                control={form.control}
+                render={({ field, fieldState }) => (
+                  <Field data-invalid={fieldState.invalid}>
+                    <FieldLabel>Rua</FieldLabel>
+                    <Input
+                      className="h-9"
+                      {...field}
+                      id="input-demo-disabled"
+                      type="text"
+                      placeholder="Rua"
+                    />
+                    {fieldState.invalid && (
+                      <FieldError errors={[fieldState.error]} />
+                    )}
+                  </Field>
                 )}
-              </Field>
-            )}
-          />
+              />
 
-          <div className="flex gap-2">
-            <Controller
-              name="city"
-              control={form.control}
-              render={({ field, fieldState }) => (
-                <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel>Cidade</FieldLabel>
-                  <Input
-                    className="h-9"
-                    {...field}
-                    id="input-demo-disabled"
-                    type="text"
-                    placeholder="Cidade"
-                  />
-                  {fieldState.invalid && (
-                    <FieldError errors={[fieldState.error]} />
-                  )}
-                </Field>
-              )}
-            />
-
-            <Controller
-              name="state"
-              control={form.control}
-              render={({ field, fieldState }) => (
-                <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel>Estado</FieldLabel>
-                  <Input
-                    className="h-9"
-                    {...field}
-                    id="input-demo-disabled"
-                    type="text"
-                    placeholder="Estado"
-                  />
-                  {fieldState.invalid && (
-                    <FieldError errors={[fieldState.error]} />
-                  )}
-                </Field>
-              )}
-            />
-          </div>
-
-          <div className="flex gap-2">
-            <Controller
-              name="zipCode"
-              control={form.control}
-              render={({ field, fieldState }) => (
-                <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel>CEP</FieldLabel>
-                  <Input
-                    className="h-9"
-                    {...field}
-                    id="input-demo-disabled"
-                    type="text"
-                    placeholder="CEP"
-                  />
-                  {fieldState.invalid && (
-                    <FieldError errors={[fieldState.error]} />
-                  )}
-                </Field>
-              )}
-            />
-
-            <Controller
-              name="country"
-              control={form.control}
-              render={({ field, fieldState }) => (
-                <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel>Pais</FieldLabel>
-                  <Input
-                    className="h-9"
-                    {...field}
-                    id="input-demo-disabled"
-                    type="text"
-                    placeholder="Pais"
-                  />
-                  {fieldState.invalid && (
-                    <FieldError errors={[fieldState.error]} />
-                  )}
-                </Field>
-              )}
-            />
-          </div>
-
-          <Controller
-            name="phone"
-            control={form.control}
-            render={({ field, fieldState }) => (
-              <Field data-invalid={fieldState.invalid}>
-                <FieldLabel>Telefone</FieldLabel>
-                <Input
-                  className="h-9"
-                  {...field}
-                  id="input-demo-disabled"
-                  type="text"
-                  placeholder="Telefone"
-                />
-                {fieldState.invalid && (
-                  <FieldError errors={[fieldState.error]} />
+              <Controller
+                name="number"
+                control={form.control}
+                render={({ field, fieldState }) => (
+                  <Field data-invalid={fieldState.invalid}>
+                    <FieldLabel>Número</FieldLabel>
+                    <Input
+                      className="h-9"
+                      {...field}
+                      id="input-demo-disabled"
+                      type="text"
+                      placeholder="Número"
+                    />
+                    {fieldState.invalid && (
+                      <FieldError errors={[fieldState.error]} />
+                    )}
+                  </Field>
                 )}
-              </Field>
-            )}
-          />
+              />
+            </div>
 
-          <div className="flex justify-between gap-2">
-            <Button onClick={() => handlingDialogsStates(false, true)}>Cancelar</Button>
-            <Button type="submit">Adicionar endereço</Button>
-          </div>
-        </FieldGroup>
-      </div>
-    </form>
-  </div>
-)
+            <div className="flex gap-2">
+              <Controller
+                name="city"
+                control={form.control}
+                render={({ field, fieldState }) => (
+                  <Field data-invalid={fieldState.invalid}>
+                    <FieldLabel>Cidade</FieldLabel>
+                    <Input
+                      className="h-9"
+                      {...field}
+                      id="input-demo-disabled"
+                      type="text"
+                      placeholder="Cidade"
+                    />
+                    {fieldState.invalid && (
+                      <FieldError errors={[fieldState.error]} />
+                    )}
+                  </Field>
+                )}
+              />
+
+              <Controller
+                name="state"
+                control={form.control}
+                render={({ field, fieldState }) => (
+                  <Field data-invalid={fieldState.invalid}>
+                    <FieldLabel>Estado</FieldLabel>
+                    <Input
+                      className="h-9"
+                      {...field}
+                      id="input-demo-disabled"
+                      type="text"
+                      placeholder="Estado"
+                    />
+                    {fieldState.invalid && (
+                      <FieldError errors={[fieldState.error]} />
+                    )}
+                  </Field>
+                )}
+              />
+            </div>
+
+            <div className="flex gap-2">
+              <Controller
+                name="zipCode"
+                control={form.control}
+                render={({ field, fieldState }) => (
+                  <Field data-invalid={fieldState.invalid}>
+                    <FieldLabel>CEP</FieldLabel>
+                    <Input
+                      className="h-9"
+                      {...field}
+                      id="input-demo-disabled"
+                      type="text"
+                      placeholder="CEP"
+                    />
+                    {fieldState.invalid && (
+                      <FieldError errors={[fieldState.error]} />
+                    )}
+                  </Field>
+                )}
+              />
+
+              <Controller
+                name="country"
+                control={form.control}
+                render={({ field, fieldState }) => (
+                  <Field data-invalid={fieldState.invalid}>
+                    <FieldLabel>Pais</FieldLabel>
+                    <Input
+                      className="h-9"
+                      {...field}
+                      id="input-demo-disabled"
+                      type="text"
+                      placeholder="Pais"
+                    />
+                    {fieldState.invalid && (
+                      <FieldError errors={[fieldState.error]} />
+                    )}
+                  </Field>
+                )}
+              />
+            </div>
+
+            <Controller
+              name="phone"
+              control={form.control}
+              render={({ field, fieldState }) => (
+                <Field data-invalid={fieldState.invalid}>
+                  <FieldLabel>Telefone</FieldLabel>
+                  <Input
+                    className="h-9"
+                    {...field}
+                    id="input-demo-disabled"
+                    type="text"
+                    placeholder="Telefone"
+                  />
+                  {fieldState.invalid && (
+                    <FieldError errors={[fieldState.error]} />
+                  )}
+                </Field>
+              )}
+            />
+
+            <div className="flex justify-between gap-2">
+              <Button onClick={() => handlingDialogsStates(false, true)}>Cancelar</Button>
+              <Button type="submit">Adicionar endereço</Button>
+            </div>
+          </FieldGroup>
+        </div>
+      </form>
+    </div>
+  )
 }

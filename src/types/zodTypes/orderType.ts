@@ -7,6 +7,7 @@ export interface ZodOrderTypes {
     firstName: string;
     secondName: string;
     email: string;
+    number: string;
     street: string;
     city: string;
     state: string;
@@ -22,6 +23,7 @@ const formSchama = z.object({
     secondName: z.string().min(1, "O sobrenome é obrigatório"),
     email: z.string().min(1, "O email é obrigatório").email("Email inválido"),
     street: z.string().min(1, "A rua é obrigatória"),
+    number: z.string().min(1, "O número da casa é obrigatório"),
     city: z.string().min(1, "A cidade é obrigatória"),
     state: z.string().min(1, "O estado é obrigatório"),
     zipCode: z.string().min(1, "O CEP é obrigatório"),
@@ -42,6 +44,7 @@ export function validateOrder() {
             secondName: '',
             email: '',
             street: '',
+            number: '',
             city: '',
             state: '',
             zipCode: '',
