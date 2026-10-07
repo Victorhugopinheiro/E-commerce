@@ -1,7 +1,6 @@
 import { useParams } from "react-router-dom"
 import { useContext, useEffect, useState } from "react";
 import {
-  BadgePercent,
   CreditCard,
   Minus,
   Package2,
@@ -16,6 +15,39 @@ import {
 import { assets } from "../assets/assets";
 import { ShopContext } from "../context/ShopContext";
 import RelatedProducts from "../components/product/RelatedProducts";
+
+import { Card, CardContent } from "@/components/ui/card"
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel"
+
+const customerReviews = [
+  {
+    name: "marcos alexsander",
+    location: "Belém, BR",
+    date: "24/09/2026",
+    title: "Muito",
+    text: "Muito bonita",
+  },
+  {
+    name: "Rangel Martins de souza",
+    location: "São Paulo, BR",
+    date: "09/09/2026",
+    title: "Muito boa",
+    text: "Muito boa amei",
+  },
+  {
+    name: "Rangel Martins de souza",
+    location: "São Paulo, BR",
+    date: "09/09/2026",
+    title: "Muito boa",
+    text: "Muito boa amei",
+  },
+];
 
 
 function Product() {
@@ -90,7 +122,7 @@ function Product() {
             </span>
           </div>
 
-          
+
 
           <p className="max-w-3xl text-base leading-7 text-gray-700">{product.description}</p>
 
@@ -215,19 +247,81 @@ function Product() {
         </div>
       </div>
 
-      <div className="flex flex-col justify-center mb-10">
+      <div className="mb-10">
+        <Carousel
+          opts={{
+            align: "start",
+          }}
+          className="relative w-full px-8 md:px-12"
+        >
+          <CarouselPrevious
+            variant="ghost"
+            className="border-0 bg-transparent text-gray-400 shadow-none hover:bg-transparent hover:text-gray-700"
+            aria-label="Ver avaliações anteriores"
+          />
 
-        <div className="flex">
-          <b className="border border-gray-500 w-fit p-2">Descrição</b>
-          <b className="border border-gray-500 w-fit p-2">Comentarios</b>
-        </div>
+          <CarouselContent className="-ml-5">
+            {customerReviews.map((review) => (
+              <CarouselItem key={`${review.name}-${review.date}`} className="basis-full pl-5 md:basis-1/2">
+                <Card
+                  size="sm"
+                  className="h-full gap-0 overflow-hidden rounded-2xl border border-gray-200 bg-white py-0 shadow-[0_1px_8px_rgba(0,0,0,0.06)] ring-0"
+                >
+                  <CardContent className="flex h-full min-h-[320px] flex-col p-4">
+                    <div className="flex items-start justify-between gap-4">
+                      <div className="flex items-center gap-0.5 text-black">
+                        {Array.from({ length: 5 }).map((_, index) => (
+                          <Star key={index} className="size-4 fill-current" />
+                        ))}
+                      </div>
+                      <span className="text-sm text-gray-400">{review.date}</span>
+                    </div>
 
-        <div className="flex flex-col gap-6 border border-gray-500 p-6">
-          <p>{product.description}</p>
+                    <div className="mt-2 flex items-center gap-2">
+                      <div className="flex size-10 items-center justify-center rounded-lg bg-gray-100 text-gray-700">
+                        <img className="size-7" src={assets.profile_icon} alt="" />
+                      </div>
+                      <div className="flex flex-wrap items-center gap-2">
+                        <p className="text-base font-medium text-gray-900">{review.name}</p>
+                        <span className="rounded-full bg-black px-2 py-0.5 text-xs font-semibold text-white">
+                          Verificado
+                        </span>
+                      </div>
+                    </div>
 
-          <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Iste, suscipit dignissimos!
-            Temporibus nostrum ea molestiae numquam, labore officia quae impedit enim
-            provident dolor aperiam mollitia nesciunt reiciendis. Doloribus, ea exercitationem!</p>
+                    <p className="mt-1 ml-12 text-sm text-gray-500">{review.location}</p>
+
+                    <div className="mt-4 space-y-2">
+                      <h3 className="text-lg font-semibold text-gray-800">{review.title}</h3>
+                      <p className="text-base leading-7 text-gray-600">{review.text}</p>
+                    </div>
+
+                    <a
+                      href="#"
+                      className="mt-auto pt-12 text-base text-gray-800 underline underline-offset-4 transition-colors hover:text-black"
+                    >
+                      Avaliação Completa
+                    </a>
+                  </CardContent>
+                </Card>
+              </CarouselItem>
+            ))}
+          </CarouselContent>
+
+          <CarouselNext
+            variant="ghost"
+            className="border-0 bg-transparent text-gray-400 shadow-none hover:bg-transparent hover:text-gray-700"
+            aria-label="Ver próximas avaliações"
+          />
+        </Carousel>
+
+        <div className="mt-8 flex justify-center">
+          <button
+            type="button"
+            className="rounded-full bg-gray-900 px-6 py-3 text-base font-semibold text-white transition-colors hover:bg-gray-800"
+          >
+            Ler Mais Avaliações
+          </button>
         </div>
 
       </div>
