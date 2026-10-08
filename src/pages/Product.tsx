@@ -247,18 +247,14 @@ function Product() {
         </div>
       </div>
 
-      <div className="mb-10">
+      <div className="mb-10 relative ">
         <Carousel
           opts={{
             align: "start",
           }}
-          className="relative w-full px-8 md:px-12"
+          className="relative max-w-full px-8 md:px-12"
         >
-          <CarouselPrevious
-            variant="ghost"
-            className="border-0 bg-transparent text-gray-400 shadow-none hover:bg-transparent hover:text-gray-700"
-            aria-label="Ver avaliações anteriores"
-          />
+
 
           <CarouselContent className="-ml-5">
             {customerReviews.map((review) => (
@@ -308,9 +304,15 @@ function Product() {
             ))}
           </CarouselContent>
 
+          <CarouselPrevious
+            variant="default"
+            className="border-0 left-0 absolute bg-transparent text-gray-400 shadow-none hover:bg-transparent hover:text-gray-700"
+            aria-label="Ver avaliações anteriores"
+          />
+
           <CarouselNext
-            variant="ghost"
-            className="border-0 bg-transparent text-gray-400 shadow-none hover:bg-transparent hover:text-gray-700"
+            variant="default"
+            className=" bg-transparent right-0 absolute text-gray-400 shadow-none hover:bg-transparent hover:text-gray-700"
             aria-label="Ver próximas avaliações"
           />
         </Carousel>
