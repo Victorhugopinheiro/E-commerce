@@ -45,7 +45,7 @@ createRoot(document.getElementById('root')!).render(
           </ShopProvider>
 
         </AuthProvider>
-      </BrowserRouter>,
+      </BrowserRouter>
     </>
 
   </QueryClientProvider>

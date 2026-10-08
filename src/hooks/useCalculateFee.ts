@@ -1,8 +1,6 @@
 import { useQuery } from "@tanstack/react-query"
 import api from "@/service/api"
 
-import { useAddresses } from "./UseAddressesHook";
-
 
 export interface DeliveryRange {
     min: number;

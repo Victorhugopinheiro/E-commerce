@@ -9,7 +9,6 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
@@ -32,9 +31,7 @@ interface AddressComponentProps {
   error: Error | null
   form: UseFormReturn<ZodOrderTypes>
   onSubmit: (data: ZodOrderTypes) => void
-  mutateAddress: any
   fretes?: ShippingQuote[] | null
-  loadingFee?: boolean
   userIdentifications?: CreateUserIdentificationInput
 }
 
@@ -44,9 +41,7 @@ export default function AddressComponent({
   error,
   form,
   onSubmit,
-  mutateAddress,
   fretes,
-  loadingFee,
   userIdentifications
 }: AddressComponentProps) {
   if (isLoading) {
@@ -269,7 +264,7 @@ export default function AddressComponent({
 
 
 
-              {fretes && fretes.length > 0 ? fretes.map((frete, index) => {
+              {fretes && fretes.length > 0 ? fretes.map((frete) => {
 
 
 

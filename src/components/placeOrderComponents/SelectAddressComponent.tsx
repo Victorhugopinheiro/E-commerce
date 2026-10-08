@@ -52,7 +52,7 @@ export const SelectAddressComponent = ({ addresses }: AddAddressComponentProps) 
 
     }
 
-    async function handleSelectAddress(idAddress: string, index?: number) {
+    async function handleSelectAddress(idAddress: string) {
 
         const findIndex = addresses?.userAddresses!.findIndex((address) => address._id === idAddress)
 
@@ -66,9 +66,6 @@ export const SelectAddressComponent = ({ addresses }: AddAddressComponentProps) 
             const response = await api.post(`/api/address/changePrimaryAddress/${idAddress}`, {
 
             })
-
-
-            const findindex = addresses?.userAddresses!.findIndex((address) => address._id === idAddress)
 
 
             if (response.status === 200) {
@@ -151,8 +148,8 @@ export const SelectAddressComponent = ({ addresses }: AddAddressComponentProps) 
                                         </span>
                                     </div>
 
-                                    {addresses?.userAddresses!.map((address, index) => (
-                                        <div key={index} className="flex items-center gap-3">
+                                    {addresses?.userAddresses!.map((address) => (
+                                        <div key={address._id} className="flex items-center gap-3">
                                             <RadioGroupItem value={`${address._id}`} id="r1" />
                                             <Label className="" htmlFor="r1">
                                                 <div className="flex flex-row gap-0.5">
@@ -163,7 +160,7 @@ export const SelectAddressComponent = ({ addresses }: AddAddressComponentProps) 
                                                 </div>
                                             </Label>
                                         </div>
-                                    )).splice(0, 4)}
+                                    )).slice(0, 4)}
 
                                 </div>
                             </RadioGroup>

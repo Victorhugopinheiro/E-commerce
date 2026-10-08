@@ -18,9 +18,9 @@ import { useUserIdentifications } from "@/hooks/userIdentifications"
 function PlaceOrder() {
   const { authenticated } = useContext(AuthContext)!
   const { cart } = useContext(ShopContext)!
-  const mutateAddress = useMutateAddress(authenticated ?? null)
+  const mutateAddress = useMutateAddress()
   const { data: addresses, isLoading, error } = useAddresses(authenticated!)
-  const { data: shippingFee, isLoading: loadingFee } = useCalculateFee(authenticated!)
+  const { data: shippingFee } = useCalculateFee(authenticated!)
   const { data: userIdentifications } = useUserIdentifications()
 
 
@@ -88,46 +88,6 @@ function PlaceOrder() {
 
   }
 
-  async function Payment() {
-
-    if (!addresses) {
-      toast.error('Adicione um endereço de entrega antes de prosseguir com o pagamento.');
-      return;
-    }
-
-    if (addresses.userAddresses!.length === 0) {
-      toast.error('Adicione um endereço de entrega antes de prosseguir com o pagamento.');
-      return;
-    }
-
-    try {
-      const response = await api.post("/api/orders/create-stripe", {
-        items: cart,
-        shippingAddress: {
-          street: addresses.userAddresses![0]!.street,
-          city: addresses.userAddresses![0].city,
-          state: addresses.userAddresses![0]!.state,
-          zipCode: addresses.userAddresses![0]!.zipCode,
-          country: addresses.userAddresses![0]!.country
-        },
-        paymentMethod: "stripe"
-
-      })
-
-      if (response.data.success) {
-        const { sessionUrl } = response.data;
-        window.location.replace(sessionUrl);
-      }
-
-    }
-    catch (error) {
-      toast.error('Erro ao criar pedido. Tente novamente.');
-    }
-
-
-  }
-
-
   async function onSubmit(data: ZodOrderTypes) {
     if (!authenticated) {
       toast.error('Usuário não autenticado. Faça login para adicionar um endereço.');
@@ -172,11 +132,9 @@ function PlaceOrder() {
       <AddressComponent
         addresses={addresses!}
         isLoading={isLoading}
-        loadingFee={loadingFee}
         error={error}
         form={form}
         onSubmit={onSubmit}
-        mutateAddress={mutateAddress}
         fretes={shippingFee?.data}
         userIdentifications={userIdentifications?.data}
 
