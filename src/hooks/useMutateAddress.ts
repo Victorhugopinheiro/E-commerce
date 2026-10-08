@@ -6,7 +6,7 @@ import { toast } from 'react-toastify'
 
 
 
-export function useMutateAddress(authenticated: boolean | null) {
+export function useMutateAddress() {
   const queryClient = useQueryClient()
 
 

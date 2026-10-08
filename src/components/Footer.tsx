@@ -60,16 +60,6 @@ const footerSections: FooterSection[] = [
     },
 ]
 
-const paymentMethods = [
-    { label: 'AMEX', className: 'bg-[#0f74d1] text-white' },
-    { label: 'Diners', className: 'bg-white text-[#0f74d1]' },
-    { label: 'Discover', className: 'bg-white text-[#ef7d00]' },
-    { label: 'Elo', className: 'bg-white text-[#00826f]' },
-    { label: 'JCB', className: 'bg-white text-[#2f7fdb]' },
-    { label: 'MC', className: 'bg-[#ff5f00] text-white' },
-    { label: 'VISA', className: 'bg-[#1a3fff] text-white' },
-]
-
 function Footer() {
     const [openSections, setOpenSections] = useState<Record<FooterSectionId, boolean>>({
         institucional: true,

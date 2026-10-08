@@ -3,7 +3,6 @@ import api from "../service/api";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import type { User } from "@/types/userTypes";
-import { set } from "zod";
 
 interface AuthContextType {
     authenticated: boolean;
@@ -30,9 +29,6 @@ export const AuthContext = createContext({} as AuthContextType);
 export function AuthProvider({ children }: { children: React.ReactNode }) {
     const [authenticated, setAuthenticated] = useState<boolean>(false);
     const [user, setUser] = useState<User | null>(null);
-    const [loading, setLoading] = useState<boolean>(true);
-
-
     const navigate = useNavigate();
 
     const signIn = async (email: string, password: string) => {
@@ -120,9 +116,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
         const validatingAuth = async () => {
             try {
-                setLoading(true);
-
-
                 const response = await api.get('/api/users/userDetails');
 
                 if (response.data.success) {
@@ -136,9 +129,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
                 console.error("Error validating auth:", error);
                 setAuthenticated(false);
                 navigate('/login');
-            } finally {
-                setLoading(false);
-
             }
 
         }

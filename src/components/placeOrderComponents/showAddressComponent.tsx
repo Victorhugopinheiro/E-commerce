@@ -2,22 +2,17 @@
 import { AddAddress, type AddAddressType } from "@/types/zodTypes/addAddressType"
 import {
   Field,
-  FieldContent,
-  FieldDescription,
   FieldLabel,
 } from "@/components/ui/field"
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 
 import { Controller } from "react-hook-form"
 
 import Tittle from "../Tittle"
-import { FieldError, FieldGroup, } from "@/components/ui/field"
+import { FieldError, FieldGroup } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { toast } from "react-toastify"
 import { useMutateAddress } from "@/hooks/useMutateAddress"
-import { useContext } from "react"
-import { AuthContext } from "@/context/authContext"
 
 
 
@@ -27,9 +22,7 @@ interface ShowAddressComponentProps {
 
 export function ShowAddressComponent({ handlingDialogsStates }: ShowAddressComponentProps) {
 
-  const { authenticated } = useContext(AuthContext)!
-
-  const mutateAddress = useMutateAddress(authenticated ?? null)
+  const mutateAddress = useMutateAddress()
 
   const form = AddAddress()
 
