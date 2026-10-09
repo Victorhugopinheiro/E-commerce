@@ -142,8 +142,10 @@ a.active hr{
   }
   body {
     @apply bg-background text-foreground;
+    direction: ltr;
   }
   html {
     @apply font-sans;
+    direction: rtl;
   }
 }

@@ -68,6 +68,9 @@ interface ShopContextType {
 
     gettinProducts?: () => void;
 
+    cartToggle: boolean;
+    setCartToggle: (toggle: boolean) => void;
+
 }
 
 export const ShopContext = createContext<ShopContextType | undefined>(undefined);
@@ -75,12 +78,13 @@ export const ShopContext = createContext<ShopContextType | undefined>(undefined)
 // ...existing code...
 
 export const ShopProvider = ({ children }: { children: React.ReactNode }) => {
-    const {  signOut, authenticated } = useContext(AuthContext)!;
+    const { signOut, authenticated } = useContext(AuthContext)!;
 
     const [currency, setCurrency] = useState<string>("R$");
     const [fee, setFee] = useState<string>(`${localStorage.getItem("selectedShipping") ? JSON.parse(localStorage.getItem("selectedShipping")!).price : "0"}`);
     const [feeId, setFeeId] = useState<string>(`${localStorage.getItem("selectedShipping") ? JSON.parse(localStorage.getItem("selectedShipping")!).id : ""}`);
     const [products, setProducts] = useState<ProductProps[]>([]);
+    const [cartToggle, setCartToggle] = useState<boolean>(false);
 
     const [latesteProducts, setLatestProducts] = useState<ProductProps[]>([]);
     const [bestSallers, setBestSallers] = useState<ProductProps[]>([]);
@@ -128,7 +132,7 @@ export const ShopProvider = ({ children }: { children: React.ReactNode }) => {
         try {
             const response = await api.delete('/api/cart/remove', {
                 data: { productId, size },
-               
+
             });
 
             if (response.data.success) {
@@ -169,33 +173,34 @@ export const ShopProvider = ({ children }: { children: React.ReactNode }) => {
             }
         } catch (error) {
             toast.error("Erro ao carregar produtos.");
-           
+
         }
     }
 
-  const getProductsCart = async () => {
+    const getProductsCart = async () => {
         // Verificações mais rigorosas
-        if (!authenticated ) {
+        if (!authenticated) {
             return;
         }
 
         try {
-           
+
 
             const response = await api.post('/api/cart/items', {}, {
-               
+
             });
 
             if (response.data.success) {
                 setCart(response.data.cart || []);
-            
+
             }
         } catch (error: unknown) {
             if (axios.isAxiosError(error)) {
-                 
+
 
                 if (error.response?.status === 401) {
-                    signOut();}
+                    signOut();
+                }
             }
         }
     };
@@ -205,8 +210,8 @@ export const ShopProvider = ({ children }: { children: React.ReactNode }) => {
         gettinProducts();
     }, []);
 
-  
-     useEffect(() => {
+
+    useEffect(() => {
         if (authenticated) {
             const timeoutId = setTimeout(() => {
                 getProductsCart();
@@ -231,10 +236,10 @@ export const ShopProvider = ({ children }: { children: React.ReactNode }) => {
             bestSallers, setBestSallers,
             search, setSearch, setShowSearch, showSearch,
             cart, setCart, addToCart, removeProduct, totalItems, setTotalValue, totalValue,
-            gettinProducts, feeId, setFeeId
+            gettinProducts, feeId, setFeeId, cartToggle, setCartToggle,
         }}>
             {children}
         </ShopContext.Provider>
-    );
+    );  
 };
 // ...existing code...

@@ -12,30 +12,42 @@ import Navbar from "./components/Navbar"
 import Footer from "./components/Footer"
 import Search from "./components/Search"
 import { ToastContainer } from 'react-toastify';
+import CartProduct from "./components/CartProducts"
 
 
 function App() {
+
+
    return (
       <div className="px-4  sm:px-[5vh] md:px-[2vh] lg:px-[8vh]">
          <Navbar />
          <Search />
          <ToastContainer />
-         <Routes>
 
-            <Route path="/" element={<Home />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/cart" element={<Cart />} />
-            <Route path="/collection" element={<Collection />} />
-            <Route path="/contact" element={<Contact />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/orders" element={<Orders />} />
-            <Route path="/place-order" element={<PlaceOrder />} />
-            <Route path="/product/:id" element={<Product />} />
-         </Routes>
+         <div className="flex flex-col md:flex-row">
+            <div>
+               <Routes>
+
+                  <Route path="/" element={<Home />} />
+                  <Route path="/about" element={<About />} />
+                  <Route path="/cart" element={<Cart />} />
+                  <Route path="/collection" element={<Collection />} />
+                  <Route path="/contact" element={<Contact />} />
+                  <Route path="/login" element={<Login />} />
+                  <Route path="/orders" element={<Orders />} />
+                  <Route path="/place-order" element={<PlaceOrder />} />
+                  <Route path="/product/:id" element={<Product />} />
+               </Routes>
+            </div>
+
+
+         </div>
+
+         <CartProduct />
 
 
 
-         <Footer/>
+         <Footer />
       </div>
    )
 }

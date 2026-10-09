@@ -3,11 +3,12 @@ import { assets } from '../assets/assets'
 import { useContext, useState } from 'react'
 import { ShopContext } from '../context/ShopContext'
 import { AuthContext } from '../context/authContext'
+import { Button } from './ui/button'
 
 const Navbar = () => {
 
     const [controlMenu, setControlMenu] = useState(false)
-    const { setShowSearch, cart } = useContext(ShopContext)!;
+    const { setShowSearch, cart, cartToggle, setCartToggle } = useContext(ShopContext)!;
     const { authenticated, signOut } = useContext(AuthContext)!;
 
 
@@ -67,12 +68,11 @@ const Navbar = () => {
                         </>}
                 </div>
 
-
-                <Link to={'/cart'} className='relative'>
+                <Button onClick={() => setCartToggle(!cartToggle)} className='relative bg-transparent '>
                     <img className='w-5 min-w-5' src={assets.cart_icon} />
                     <p className='absolute right-[-5px] bottom-[-5px] w-4 text-center leading-4 bg-black
                      text-white rounded-full aspect-square text-[8px]'>{cart?.length}</p>
-                </Link>
+                </Button>
 
                 <img onClick={() => setControlMenu(true)} className='w-5 md:hidden' src={assets.menu_icon} />
             </div>
