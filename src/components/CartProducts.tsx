@@ -11,7 +11,10 @@ function CartProduct() {
 
     const { cart, currency, products, removeProduct, addToCart, cartToggle, setCartToggle } = useContext(ShopContext)!;
 
-
+    function handleCheckout() {
+        navigation("/place-order");
+        setCartToggle(false);
+    }
 
 
     return (
@@ -99,7 +102,7 @@ function CartProduct() {
 
                                 <CartTotal />
 
-                                <div onClick={() => navigation('/place-order')} className="bg-black text-center cursor-pointer text-white mt-6 px-6 py-4 rounded">
+                                <div onClick={() => handleCheckout()} className="bg-black text-center cursor-pointer text-white mt-6 px-6 py-4 rounded">
                                     <p className="text-xl">Finalizar compra</p>
                                 </div>
 
