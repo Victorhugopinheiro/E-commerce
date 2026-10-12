@@ -14,10 +14,9 @@ function LastestsCollections() {
             <div className="flex justify-center items-center flex-col ">
                 <Tittle title1="ULTIMOS" title2="LANÇAMENTOS" />
 
-                <p className="text-gray-600 max-w-6/12 text-center">Lorem ipsum dolor sit, amet consectetur adipisicing elit.
-                    Excepturi velit consequuntur nesciunt consectetur, fugiat doloribus eligendi laboriosam
-                    repellat vero impedit quod numquam veniam.
-                </p>
+                <p className="text-gray-600 max-w-6/12 text-center">                Descubra as novidades da estação, com peças modernas, confortáveis e prontas para
+                                    renovar o seu visual.
+                                </p>
 
             </div>
 

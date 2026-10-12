@@ -1,39 +1,78 @@
+import { useEffect, useRef, useState } from "react"
 import { assets } from "../assets/assets"
+import Autoplay from "embla-carousel-autoplay"
+import {
+    Carousel,
+    CarouselContent,
+    CarouselItem,
+    CarouselNext,
+    CarouselPrevious,
+    type CarouselApi,
+} from "@/components/ui/carousel"
 
-
-
+// Add more full-size banner images here to get more slides
+const slides = [
+    { src: assets.hero_img, alt: "Recem chegados" },
+    { src: assets.hero_img, alt: "Recem chegados" },
+    { src: assets.hero_img, alt: "Recem chegados" },
+]
 
 function Hero() {
+    const [api, setApi] = useState<CarouselApi>()
+    const [current, setCurrent] = useState(0)
+    const autoplay = useRef(
+        Autoplay({ delay: 5000, stopOnInteraction: false, stopOnMouseEnter: true })
+    )
+
+    useEffect(() => {
+        if (!api) return
+        const onSelect = () => setCurrent(api.selectedScrollSnap())
+        onSelect()
+        api.on("select", onSelect)
+        return () => {
+            api.off("select", onSelect)
+        }
+    }, [api])
+
     return (
-        <div className='flex flex-col md:flex-row  border-gray-400 border'>
+        <Carousel
+            setApi={setApi}
+            opts={{ loop: slides.length > 1 }}
+            plugins={slides.length > 1 ? [autoplay.current] : []}
+            className="relative left-1/2 right-1/2 -mx-[50.375vw] w-screen"
+        >
+            <CarouselContent className="ml-0">
+                {slides.map((slide, index) => (
+                    <CarouselItem key={index} className="pl-0">
+                        <img
+                            className="w-full h-[60vh] min-h-72 max-h-[40rem] object-cover select-none"
+                            src={slide.src}
+                            alt={slide.alt}
+                            draggable={false}
+                        />
+                    </CarouselItem>
+                ))}
+            </CarouselContent>
 
+            {slides.length > 1 && (
+                <>
+                    <CarouselPrevious className="left-4 hidden sm:inline-flex" />
+                    <CarouselNext className="right-4 hidden sm:inline-flex" />
 
-            <div className='w-full md:w-1/2 flex items-center justify-center '>
-
-                <div className="text-[#414141]">
-                    <div className='flex gap-2 items-center'>
-
-                        <p className='w-8 h-[2px] md:w-10 font-bold bg-[#414141]'></p>
-                        <p className="font-medium text-sm md:text-base">Melhores preços</p>
-
+                    <div className="absolute bottom-3 left-1/2 flex -translate-x-1/2 gap-2">
+                        {slides.map((_, index) => (
+                            <button
+                                key={index}
+                                type="button"
+                                aria-label={`Ir para o slide ${index + 1}`}
+                                onClick={() => api?.scrollTo(index)}
+                                className={`h-1.5 rounded-full transition-all ${index === current ? "w-6 bg-white" : "w-3 bg-white/50"}`}
+                            />
+                        ))}
                     </div>
-
-                    <h1 className="prata-regular text-3xl sm:py-3 lg:text-5xl leading-relaxed">Recem chegados</h1>
-
-                    <div className="flex items-center gap-2">
-                        <p className="font-medium text-sm md:text-base">Compre Agora</p>
-                        <p className='w-8 h-[1px] md:w-10 font-bold bg-[#414141]'></p>
-                    </div>
-                </div>
-
-
-            </div>
-
-
-            <img className="w-full pt-3 md:w-1/2" src={assets.hero_img} />
-
-
-        </div>
+                </>
+            )}
+        </Carousel>
     )
 }
 
