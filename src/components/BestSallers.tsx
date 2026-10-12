@@ -18,10 +18,9 @@ function BestSallers() {
             <div className="flex justify-center items-center flex-col ">
                 <Tittle title1="MELHORES" title2="OFERTAS" />
 
-                <p className="text-gray-600 max-w-6/12 text-center">Lorem ipsum dolor sit, amet consectetur adipisicing elit.
-                    Excepturi velit consequuntur nesciunt consectetur, fugiat doloribus eligendi laboriosam
-                    repellat vero impedit quod numquam veniam.
-                </p>
+                <p className="text-gray-600 max-w-6/12 text-center">                Os produtos mais queridos pelos nossos clientes, com qualidade garantida e preços
+                                    que cabem no seu bolso.
+                                </p>
 
             </div>
 

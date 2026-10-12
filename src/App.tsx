@@ -25,7 +25,7 @@ function App() {
          <ToastContainer />
 
          <div className="flex flex-col md:flex-row">
-            <div>
+            <div className="flex-1">
                <Routes>
 
                   <Route path="/" element={<Home />} />
