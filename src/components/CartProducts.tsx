@@ -100,11 +100,11 @@ function CartProduct() {
                         <div className="flex justify-end mt-4 mx-4">
                             <div className="w-full md:w-[400px]">
 
-                                <CartTotal />
-
-                                <div onClick={() => handleCheckout()} className="bg-black text-center cursor-pointer text-white mt-6 px-6 py-4 rounded">
-                                    <p className="text-xl">Finalizar compra</p>
-                                </div>
+                                <CartTotal>
+                                    <div onClick={() => handleCheckout()} className="bg-black text-center cursor-pointer text-white mt-2 px-6 py-4 rounded">
+                                        <p className="text-xl font-bold">Finalizar compra</p>
+                                    </div>
+                                </CartTotal>
 
                             </div>
 
