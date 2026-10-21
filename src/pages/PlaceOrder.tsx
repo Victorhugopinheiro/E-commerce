@@ -128,7 +128,7 @@ function PlaceOrder() {
 
 
   return (
-    <div className="flex gap-10 bg-r w-full flex-col lg:flex-row lg:justify-center mx-auto">
+    <div className="flex container mx-auto gap-10 bg-r w-full flex-col lg:flex-row lg:justify-center">
       <AddressComponent
         addresses={addresses!}
         isLoading={isLoading}
@@ -143,7 +143,7 @@ function PlaceOrder() {
 
       <div className="flex flex-col justify-center items-center mx-auto items w-full max-w-[500px]">
         <CartTotal>
-          <button onClick={() => PaymentAssas()} type="submit" className="mt-2 px-6 py-4 w-full text-center rounded bg-black text-white text-xl font-bold cursor-pointer">Pagar</button>
+          <button onClick={() => PaymentAssas()} type="submit" className="mt-2 px-6 py-4 w-full text-center rounded bg-black text-white text-xl font-bold cursor-pointer hover:bg-green-700 transition-colors">Pagar</button>
         </CartTotal>
       </div>
     </div>

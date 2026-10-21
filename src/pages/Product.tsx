@@ -77,7 +77,7 @@ function Product() {
   }
 
   return (
-    <div className="flex flex-col border-t-2 border-gray-200">
+    <div className="flex flex-col container mx-auto border-t-2 border-gray-200">
       <div className="flex flex-col gap-10 py-10 md:flex-row">
         <div className="flex flex-1 flex-col-reverse gap-5 md:flex-row">
           <div className="flex w-full justify-around gap-2 md:w-[calc(20%-0.4rem)] md:flex-col md:justify-start">
@@ -185,7 +185,7 @@ function Product() {
                     addToCart({ productId: product._id, quantity, size: sizeSelected, name: product.name })
                   }
                 }}
-                className="inline-flex flex-1 items-center justify-center gap-2 rounded-2xl bg-black px-6 py-4 text-base font-semibold text-white transition-colors hover:bg-gray-800"
+                className="inline-flex flex-1 items-center justify-center gap-2 rounded-2xl bg-black px-6 py-4 text-base font-semibold text-white transition-colors hover:bg-green-700"
               >
                 <ShoppingCart className="size-5" />
                 Adicionar ao carrinho
@@ -195,7 +195,7 @@ function Product() {
 
           <div className="grid gap-3">
             <div className="flex items-center gap-3 rounded-2xl border border-gray-200 bg-white px-4 py-4">
-              <Truck className="size-5 shrink-0 text-red-500" />
+              <Truck className="size-5 shrink-0 text-green-700" />
               <p className="text-sm font-semibold text-gray-900">
                 FRETE GRÁTIS <span className="font-normal text-gray-600">a partir de R$ 199</span>
               </p>

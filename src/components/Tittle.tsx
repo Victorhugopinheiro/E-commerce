@@ -10,9 +10,9 @@ function Tittle({ title1, title2 }: TitleProps) {
         <div className="my-10 flex items-center justify-start gap-2">
 
             <p className="text-xl md:text-2xl text-gray-600">{title1}</p>
-            <p className=" text-2xl md:text-3xl font-medium">{title2}</p>
+            <p className=" text-2xl text-green-900 md:text-3xl font-medium">{title2}</p>
 
-            <div className="h-[1px] bg-gray-600 w-[8px] font-medium md:w-[40px]" />
+            <div className="h-[1px] bg-green-700 w-[8px] font-medium md:w-[40px]" />
         </div>
     )
 }

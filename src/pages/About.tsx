@@ -5,7 +5,7 @@ import SendEmail from '../components/SendEmail'
 
 function About() {
   return (
-    <div className='flex flex-col justify-center items-center my-2'>
+    <div className='flex container mx-auto flex-col justify-center items-center my-2'>
 
       <Tittle title1='Sobre' title2='Nós' />
 

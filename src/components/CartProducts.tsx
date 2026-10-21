@@ -66,7 +66,7 @@ function CartProduct() {
 
                                         <div className="flex items-center gap-2">
                                             <button onClick={() => addToCart!({ productId: item.productId, quantity: 1, size: item.size })}
-                                                className="bg-black text-white px-3 py-1 rounded hover:bg-gray-800 transition-colors duration-200"
+                                                className="bg-black text-white px-3 py-1 rounded hover:bg-green-700 transition-colors duration-200"
                                             // onClick={...}
                                             >
                                                 +
@@ -101,7 +101,7 @@ function CartProduct() {
                             <div className="w-full md:w-[400px]">
 
                                 <CartTotal>
-                                    <div onClick={() => handleCheckout()} className="bg-black text-center cursor-pointer text-white mt-2 px-6 py-4 rounded">
+                                    <div onClick={() => handleCheckout()} className="bg-black text-center cursor-pointer text-white mt-2 px-6 py-4 rounded hover:bg-green-700 transition-colors duration-200">
                                         <p className="text-xl font-bold">Finalizar compra</p>
                                     </div>
                                 </CartTotal>

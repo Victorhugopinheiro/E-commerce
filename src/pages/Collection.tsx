@@ -1,9 +1,12 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useMemo, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import { assets } from "../assets/assets";
 import Checkbox from "../components/collection/Checkbox";
 import Tittle from "../components/Tittle";
 import ImgModel from "../components/ImgModel";
 import { ShopContext } from "../context/ShopContext";
+import api from "../service/api";
+import { toast } from "react-toastify";
 
 
 export interface ProductProps {
@@ -21,14 +24,25 @@ export interface ProductProps {
 
 function Collection() {
 
-  const { products, showSearch, search } = useContext(ShopContext)!;
+  const { showSearch, search } = useContext(ShopContext)!;
+
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const [showFilters, setShowFilters] = useState(true);
+  const [backendProducts, setBackendProducts] = useState<ProductProps[]>([]);
   const [filterProducts, setFilterProducts] = useState<ProductProps[]>([]);
-
-  const [category, setCategory] = useState<string[]>([]);
-  const [subCategory, setSubCategory] = useState<string[]>([]);
   const [sortProducts, setSortProducts] = useState<string>("Relevant");
+
+  // Category/subCategory filters are the URL's source of truth, so navbar links and
+  // manual checkbox toggles both end up driving the same backend-filtered fetch.
+  const category = useMemo(
+    () => searchParams.get("category")?.split(",").filter(Boolean) ?? [],
+    [searchParams]
+  );
+  const subCategory = useMemo(
+    () => searchParams.get("subCategory")?.split(",").filter(Boolean) ?? [],
+    [searchParams]
+  );
 
   useEffect(() => {
     const handleResize = () => {
@@ -46,103 +60,83 @@ function Collection() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+  const toggleParamValue = (key: "category" | "subCategory", value: string) => {
+    const current = searchParams.get(key)?.split(",").filter(Boolean) ?? [];
 
-  useEffect(() => {
-    setFilterProducts(products!)
+   
 
-  }, []);
+    const next = current.includes(value)
+      ? current.filter((item) => item !== value)
+      : [...current, value];
 
+    const nextParams = new URLSearchParams(searchParams);
+    if (next.length > 0) {
+      nextParams.set(key, next.join(","));
+    } else {
+      nextParams.delete(key);
+    }
+
+    setSearchParams(nextParams);
+  };
 
   const changeCategory = (e: React.ChangeEvent<HTMLInputElement>) => {
-
-    if (category.includes(e.target.value)) {
-      setCategory(prev => prev.filter(cat => cat !== e.target.value));
-    } else {
-      setCategory(prev => [...prev, e.target.value]);
-    }
-  }
+    toggleParamValue("category", e.target.value);
+  };
 
   const changeSubcategory = (e: React.ChangeEvent<HTMLInputElement>) => {
+    toggleParamValue("subCategory", e.target.value);
+  };
 
-    if (subCategory.includes(e.target.value)) {
-      setSubCategory(prev => prev.filter(cat => cat !== e.target.value));
-    } else {
-      setSubCategory(prev => [...prev, e.target.value]);
+  // Fetches already-filtered products from the backend whenever the category/subCategory
+  // filters change (whether triggered by the navbar or by the checkboxes).
+  useEffect(() => {
+    const fetchFilteredProducts = async () => {
+      try {
+        const response = await api.get("/api/products/list", {
+          params: {
+            category: category.length > 0 ? category.join(",") : undefined,
+            subCategory: subCategory.length > 0 ? subCategory.join(",") : undefined,
+          },
+        });
+
+        if (response.data.success) {
+          console.log(response.data.products);
+          setBackendProducts(response.data.products);
+        }
+      } catch {
+        toast.error("Erro ao carregar produtos.");
+      }
+    };
+
+    fetchFilteredProducts();
+  }, [category, subCategory]);
+
+  // Applies the (client-side) search term and sort order on top of the backend-filtered list.
+  useEffect(() => {
+    let result = [...backendProducts];
+
+    if (search && showSearch) {
+      result = result.filter(
+        (product) =>
+          product.name.toLowerCase().includes(search.toLowerCase()) ||
+          product.description.toLowerCase().includes(search.toLowerCase())
+      );
     }
-  }
-
-  const sortItems = () => {
-
-  
-    const showProducts = [...filterProducts];
 
     switch (sortProducts) {
       case "Low-high":
-        showProducts.sort((a, b) => a.price - b.price);
-        setFilterProducts([...showProducts]);
+        result.sort((a, b) => a.price - b.price);
         break;
-
       case "High-low":
-        showProducts.sort((a, b) => b.price - a.price);
-        setFilterProducts([...showProducts]);
-        break;
-
-      default:
-        setFilterProducts([...products!]);
+        result.sort((a, b) => b.price - a.price);
         break;
     }
-  }
 
-  const gettingFilteredProducts = () => {
-   
-    
-
-    if (search && showSearch) {
-      const filtered = products!.filter(product =>
-        product.name.toLowerCase().includes(search.toLowerCase()) ||
-        product.description.toLowerCase().includes(search.toLowerCase())
-      );
-      setFilterProducts(filtered);
-      return;
-    }
-
-    
-    if (category.length > 0 && subCategory.length > 0) {
-     
-      const filtered = products!.filter(product => category.includes(product.category) && subCategory.includes(product.subCategory))
-      setFilterProducts(filtered);
-      return
-    }
-
-    if (category.length > 0) {
-      const filtered = products!.filter(product => category.includes(product.category))
-      setFilterProducts(filtered);
-      return
-    }
-
-    if (subCategory.length > 0) {
-      const filtered = products!.filter(product => subCategory.includes(product.subCategory))
-      setFilterProducts(filtered);
-      return
-    }
-
-
-    setFilterProducts(products!);
-  }
-
-  useEffect(() => {
-
-    gettingFilteredProducts();
-
-
-  }, [category, subCategory, search, showSearch, products, sortProducts]);
-
-  useEffect(() => {
-    sortItems()
-  }, [sortProducts])
+    setFilterProducts(result);
+  }, [backendProducts, search, showSearch, sortProducts]);
 
   return (
-    <div className="flex flex-col sm:flex-row gap-10">
+    <div className="flex flex-col container mx-auto sm:flex-row gap-10">
       <div className="min-w-60 w-60 ">
         <p onClick={() => setShowFilters(!showFilters)} className='flex text-center gap-2 items-center w-fit transition md:hidden'>FILTERS
           <img className={`h-3  ${showFilters ? 'rotate-90' : ''}`} src={assets.dropdown_icon} />
@@ -159,18 +153,18 @@ function Collection() {
         <div className={`flex flex-col my-2 justify-center gap-2 border p-4 border-gray-300 ${showFilters ? "" : "hidden"}`}>
           <p className="mb-1 font-medium">CATEGORIAS</p>
 
-          <Checkbox onChange={changeCategory} title="HOMEM" value="Men" />
-          <Checkbox onChange={changeCategory} title="MULHER" value="Women" />
-          <Checkbox onChange={changeCategory} title="CRIANÇA" value="Kids" />
+          <Checkbox onChange={changeCategory} checked={category.includes("Men")} title="HOMEM" value="Men" />
+          <Checkbox onChange={changeCategory} checked={category.includes("Women")} title="MULHER" value="Women" />
+          <Checkbox onChange={changeCategory} checked={category.includes("Kids")} title="CRIANÇA" value="Kids" />
 
         </div>
 
         <div className={`flex flex-col my-2 justify-center gap-2 border p-4  border-gray-300 ${showFilters ? "" : "hidden"}`}>
           <p className="mb-1 font-medium">TIPO</p>
 
-          <Checkbox onChange={changeSubcategory} title="CAMISETAS" value="Topwear" />
-          <Checkbox onChange={changeSubcategory} title="AGASALHOS" value="Winterwear" />
-          <Checkbox onChange={changeSubcategory} title="BERMUDAS" value="Bottomwear" />
+          <Checkbox onChange={changeSubcategory} checked={subCategory.includes("Topwear")} title="CAMISETAS" value="Topwear" />
+          <Checkbox onChange={changeSubcategory} checked={subCategory.includes("Winterwear")} title="AGASALHOS" value="Winterwear" />
+          <Checkbox onChange={changeSubcategory} checked={subCategory.includes("Bottomwear")} title="BERMUDAS" value="Bottomwear" />
         </div>
 
       </div>

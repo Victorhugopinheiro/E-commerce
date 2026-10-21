@@ -31,7 +31,7 @@ function Cart() {
 
 
             return (
-              <div key={item.productId} className="border-t  border-b border-gray-200 p-4 min-w-full w-full">
+              <div key={item.productId} className="border-t container mx-auto border-b border-gray-200 p-4 min-w-full w-full">
                 <div className="flex justify-between items-center">
 
 
@@ -50,7 +50,7 @@ function Cart() {
 
                   <div className="flex items-center gap-2">
                     <button onClick={() => addToCart!({ productId: item.productId, quantity: 1, size: item.size })}
-                      className="bg-black text-white px-3 py-1 rounded hover:bg-gray-800 transition-colors duration-200"
+                      className="bg-black text-white px-3 py-1 rounded hover:bg-green-700 transition-colors duration-200"
                     // onClick={...}
                     >
                       +
@@ -85,7 +85,7 @@ function Cart() {
             <div className="w-full md:w-[400px]">
 
               <CartTotal>
-                <div onClick={() => navigation('/place-order')} className="bg-black text-center cursor-pointer text-white mt-2 px-6 py-4 rounded">
+                <div onClick={() => navigation('/place-order')} className="bg-black text-center cursor-pointer text-white mt-2 px-6 py-4 rounded hover:bg-green-700 transition-colors duration-200">
                   <p className="text-xl font-bold">Finalizar compra</p>
                 </div>
               </CartTotal>
