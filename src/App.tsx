@@ -13,40 +13,46 @@ import Footer from "./components/Footer"
 import Search from "./components/Search"
 import { ToastContainer } from 'react-toastify';
 import CartProduct from "./components/CartProducts"
+import Hero from "./components/Hero"
 
 
 function App() {
 
 
    return (
-      <div className="px-4  sm:px-[5vh] md:px-[2vh] lg:px-[8vh]">
+      <div className="">
          <Navbar />
-         <Search />
+
          <ToastContainer />
 
-         <div className="flex flex-col md:flex-row">
-            <div className="flex-1">
-               <Routes>
+      
 
-                  <Route path="/" element={<Home />} />
-                  <Route path="/about" element={<About />} />
-                  <Route path="/cart" element={<Cart />} />
-                  <Route path="/collection" element={<Collection />} />
-                  <Route path="/contact" element={<Contact />} />
-                  <Route path="/login" element={<Login />} />
-                  <Route path="/orders" element={<Orders />} />
-                  <Route path="/place-order" element={<PlaceOrder />} />
-                  <Route path="/product/:id" element={<Product />} />
-               </Routes>
+         <div className=" mx-auto">
+            <div className="flex flex-col md:flex-row">
+               <div className="flex-1  mx-auto">
+                  <Routes>
+
+                     <Route path="/" element={<Home />} />
+                     <Route path="/about" element={<About />} />
+                     <Route path="/cart" element={<Cart />} />
+                     <Route path="/collection" element={<Collection />} />
+                     <Route path="/contact" element={<Contact />} />
+                     <Route path="/login" element={<Login />} />
+                     <Route path="/orders" element={<Orders />} />
+                     <Route path="/place-order" element={<PlaceOrder />} />
+                     <Route path="/product/:id" element={<Product />} />
+                  </Routes>
+               </div>
+
+
             </div>
+
+            <CartProduct />
+
+
 
 
          </div>
-
-         <CartProduct />
-
-
-
          <Footer />
       </div>
    )

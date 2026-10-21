@@ -90,7 +90,7 @@ export const ShopProvider = ({ children }: { children: React.ReactNode }) => {
     const [bestSallers, setBestSallers] = useState<ProductProps[]>([]);
 
     const [search, setSearch] = useState<string>("");
-    const [showSearch, setShowSearch] = useState<boolean>(false);
+    const [showSearch, setShowSearch] = useState<boolean>(true);
 
     const [totalValue, setTotalValue] = useState<number>(0)
     const [cart, setCart] = useState<CartItem[]>([]);

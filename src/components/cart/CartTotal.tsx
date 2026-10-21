@@ -30,7 +30,7 @@ function CartTotal({ children }: { children?: ReactNode }) {
 
                 <div className='flex justify-between items-center text-gray-700'>
                     <p className='text-xl font-bold'>Total</p>
-                    <p className='text-xl font-bold'>{currency} {(Number(totalValue) + Number(fee)).toFixed(2)}</p>
+                    <p className='text-xl font-bold text-green-700'>{currency} {(Number(totalValue) + Number(fee)).toFixed(2)}</p>
                 </div>
 
                 {children}

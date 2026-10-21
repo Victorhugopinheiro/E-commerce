@@ -32,7 +32,7 @@ function BestSallers() {
                         key={product._id}
                         url={product.image[0]}
                         title={product.name}
-                        price={`${product.price} ${product.category}`}
+                        price={String(product.price)}
                         currency={currency}
                         id={product._id}
                     />

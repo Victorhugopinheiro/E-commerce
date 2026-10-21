@@ -41,7 +41,7 @@ function Orders() {
   }, [authenticated])
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col container mx-auto">
       <Tittle title1="MEUS" title2="PEDIDOS" />
       {
 

@@ -25,7 +25,7 @@ function Login() {
   }
 
   return (
-    <form className="flex flex-col items-center w-[90%] m-auto mt-30 md:max-w-96">
+    <form className="flex flex-col container mx-auto items-center w-[90%] m-auto mt-30 md:max-w-96">
 
       <div className="inline-flex items-center mt-10 mb-2 gap-2">
         <p className="prata-regular text-3xl">{controlAuthetication === 'signUp' ? 'CADASTRAR' : 'ENTRAR'}</p>
@@ -51,9 +51,9 @@ function Login() {
       </div>
 
       {controlAuthetication === 'signUp' ? (
-        <button onClick={(e) => signUpp(e)} className="mt-6 bg-black w-[200px] text-white py-2 rounded cursor-pointer">
+        <button onClick={(e) => signUpp(e)} className="mt-6 bg-black w-[200px] text-white py-2 rounded cursor-pointer hover:bg-green-700 transition-colors">
           Cadastrar</button>
-      ) : <button onClick={(e) => signInn(e)} className="mt-6 bg-black w-[200px] text-white py-2 rounded cursor-pointer">
+      ) : <button onClick={(e) => signInn(e)} className="mt-6 bg-black w-[200px] text-white py-2 rounded cursor-pointer hover:bg-green-700 transition-colors">
         Entrar</button>}
     </form>
   )

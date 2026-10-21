@@ -76,7 +76,7 @@ function Footer() {
     }
 
     return (
-        <footer className='relative mt-20 overflow-hidden bg-black text-white -mx-4  md:-mx-[2vh] lg:-mx-[8vh]'>
+        <footer className='relative mt-20 overflow-hidden border-t-2 border-green-700 bg-black text-white  '>
             <div className='pointer-events-none absolute inset-y-0 right-0 hidden w-[34rem] opacity-10 lg:block'>
                 <img
                     src={assets.logo}
@@ -224,7 +224,7 @@ function Footer() {
                             <p>Rua da Amora, 250 - SP - SP | CEP: 00000-000</p>
                         </div>
 
-                        
+
                     </div>
                 </div>
             </div>
