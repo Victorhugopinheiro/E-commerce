@@ -46,14 +46,14 @@ function Hero() {
                 {slides.map((slide, index) => (
                     <CarouselItem key={index} className="pl-0">
                         <img
-                            className="hidden md:w-12/12 md:flex h-[60vh] mx-auto min-h-72 max-h-[40rem] object-contain select-none"
+                            className="hidden md:block w-full max-w-[1400px] h-auto mx-auto rounded-md select-none"
                             src={slide.src}
                             alt={slide.alt}
                             draggable={false}
                         />
 
                         <img
-                            className="w-full flex md:hidden h-[60vh] mx-auto min-h-72 max-h-[40rem] object-cover select-none"
+                            className="block md:hidden w-full h-auto select-none"
                             src={slide.mobileSrc}
                             alt={slide.alt}
                             draggable={false}

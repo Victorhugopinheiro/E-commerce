@@ -10,7 +10,7 @@ function Home() {
     return (
         <>
             <Hero />
-            <div>
+            <div className="container mx-auto">
                 <Categories />
                 <LastestsCollections />
                 <BestSallers />
